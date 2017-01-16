@@ -1,0 +1,14 @@
+<com.handmark.pulltorefresh.library.PullToRefreshListView
+    android:id="@+id/listview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@color/linedivider"
+    android:dividerHeight="1dp"
+    android:headerDividersEnabled="true"
+    android:footerDividersEnabled="true"
+    android:scrollbarSize="@dimen/fab_margin"
+    tools:background="@color/common_red">
+
+</com.handmark.pulltorefresh.library.PullToRefreshListView>

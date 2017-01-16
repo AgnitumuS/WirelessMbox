@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -43,11 +42,11 @@ import java.util.Map;
  * 同样包含的热门分类
  */
 
-public class AllMdataFragment extends BaseFragment {
+public class AllMdataFragmentPtrlv extends BaseFragment {
     private static final String TAG = "AllMdataFra";
     private LayoutInflater mInflater;
 
-    private ListView mListView;
+    private PullToRefreshListView mListView;
     private AlbumListAdapter mAlbumAdapter;
     private List<Album> mAlbumList;
 
@@ -62,7 +61,7 @@ public class AllMdataFragment extends BaseFragment {
     private final String[] ATTR_PAY = {/*"不限", */"付费", "免费"};
     private final String[] ATTR_DIMENSION = {/*"默认", */"最火", "最新", "经典"};
     private final String[] CALC_DIMENSION = {"1", "1", "2", "3"};
-
+    private int iAlbumPage = 1;
 
     /**
      * 初始化各种layout
@@ -75,9 +74,9 @@ public class AllMdataFragment extends BaseFragment {
         MetaData m = new MetaData();
         //手动添加 ATTR_PAY 和 ATTR_DIMENSION Meta类型
         List<Attributes> as = new ArrayList<>();
-        for (int i = 0; i < ATTR_DIMENSION.length; i++) {
+        for (String st : ATTR_DIMENSION) {
             Attributes a = new Attributes();
-            a.setDisplayName(ATTR_DIMENSION[i]);
+            a.setDisplayName(st);
             a.setAttrKey("");
             a.setAttrValue("");
             as.add(a);
@@ -87,7 +86,8 @@ public class AllMdataFragment extends BaseFragment {
         mMetaDatas.add(m);
 
         //各种标签栏的 content
-        LinearLayout tabContent = (LinearLayout) findViewById(R.id.tabContent);
+        LinearLayout scroll_tab = (LinearLayout) mInflater.inflate(R.layout.scroll_tablayout, (ViewGroup) getView(), false);
+        LinearLayout tabContent = (LinearLayout) scroll_tab.findViewById(R.id.tabContent);
 
         int i = 0;
         for (MetaData meta : mMetaDatas) {
@@ -116,6 +116,7 @@ public class AllMdataFragment extends BaseFragment {
             tabContent.addView(view);
         }
 
+        mListView.getRefreshableView().addHeaderView(scroll_tab);
         /**初始化metas对应的index数组*/
         indexOfAttrs = new int[i];
     }
@@ -147,6 +148,7 @@ public class AllMdataFragment extends BaseFragment {
             @Override
             public void onError(int i, String s) {
                 isLoading = false;
+                JLLog.showToast(getActivity(), "加载失败~");
             }
         });
     }
@@ -169,13 +171,13 @@ public class AllMdataFragment extends BaseFragment {
                 }
             }
             if (attrStr.length() > 2) {
-                JLLog.LOGD(TAG, "attrStr = " + CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);
+                JLLog.LOGI(TAG, "attrStr = " + CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);
                 map.put(DTransferConstants.METADATA_ATTRIBUTES, attrStr.substring(0, attrStr.length() - 1));
             }
         }
 
         map.put(DTransferConstants.CALC_DIMENSION, CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);//计算维度，现支持最火（1），最新（2），经典或播放最多（3）
-        map.put(DTransferConstants.PAGE, "1");
+        map.put(DTransferConstants.PAGE, ""+iAlbumPage);
         CommonRequest.getMetadataAlbumList(map, new IDataCallBack<AlbumList>() {
             @Override
             public void onSuccess(AlbumList albumList) {
@@ -185,15 +187,18 @@ public class AllMdataFragment extends BaseFragment {
                         mAlbumList = albumList.getAlbums();
                     else
                         mAlbumList.addAll(albumList.getAlbums());
-
+                    mListView.onRefreshComplete();
                     initAlbumListView();
                 }
             }
 
             @Override
             public void onError(int i, String s) {
+                JLLog.showToast(getActivity(), "加载失败~");
                 isLoading = false;
+                mListView.onRefreshComplete();
             }
+
         });
     }
 
@@ -201,8 +206,21 @@ public class AllMdataFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInflater = inflater;
-        View view = inflater.inflate(R.layout.xm_fragment_mdata, container, false);
-        mListView = (ListView) view.findViewById(R.id.listview);
+        View view = inflater.inflate(R.layout.xm_fragment_mdata_ptrlv, container, false);
+        mListView = (PullToRefreshListView) view.findViewById(R.id.listview);
+        mListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+                iAlbumPage++;
+                loadAlbumsData(false);
+            }
+        });
         return view;
     }
 
@@ -401,6 +419,7 @@ public class AllMdataFragment extends BaseFragment {
             notifyDataSetChanged();
             if (mAlbumList != null)
                 mAlbumList.clear();
+            iAlbumPage = 1;
             loadAlbumsData(false);
         }
     }

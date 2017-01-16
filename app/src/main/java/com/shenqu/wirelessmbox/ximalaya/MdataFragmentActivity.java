@@ -18,8 +18,8 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.mdatafra.AllMdataFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.TracksFragment;
+import com.shenqu.wirelessmbox.ximalaya.mdatafra.AllMdataFragmentPtrlv;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -89,14 +89,14 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
     private void initView() {
         mBtnAllCate = (TextView) findViewById(R.id.btnAllCate);
         ViewGroup tabContent = (ViewGroup) findViewById(R.id.tabContent);
-        tabContent.addView(LayoutInflater.from(this).inflate(R.layout.smart_tab_layout, tabContent, false));
+        tabContent.addView(LayoutInflater.from(this).inflate(R.layout.smart_tablayout, tabContent, false));
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.smartTabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
         fragments = new ArrayList<Fragment>();
         for (int i = 0; i < mTagList.size(); i++){
             if (i==0) {
-                fragments.add(new AllMdataFragment());
+                fragments.add(new AllMdataFragmentPtrlv());
             }
             else {
                 fragments.add(new TracksFragment());
