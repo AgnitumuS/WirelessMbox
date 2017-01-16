@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/side_padding"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/grey_light_pro"
+        android:minHeight="64dp"
+        android:minWidth="64dp"
+        android:padding="@dimen/view_small_padding"
+        android:layout_margin="@dimen/side_padding"
+        android:scaleType="fitCenter"
+        tools:background="@mipmap/ic_album"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ivEnter"
+        android:layout_toRightOf="@id/ivCover"
+        android:padding="@dimen/view_padding"
+        tools:background="@color/grey_light_pro_alpha">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="这是专辑名"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_font_normal"/>
+
+        <TextView
+            android:id="@+id/tvIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_marginTop="@dimen/view_padding"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="专辑内容简介"
+            android:textColor="@color/text_grey_light"
+            android:textSize="@dimen/text_font_small"/>
+
+        <TextView
+            android:id="@+id/tvCacl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvIntro"
+            android:drawableLeft="@mipmap/xm_tag"
+            android:textColor="@color/text_grey_light"
+            android:textSize="@dimen/text_font_small"/>
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvIntro"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_toRightOf="@id/tvCacl"
+            android:text="评分："
+            android:textColor="@color/text_grey_light"
+            android:textSize="@dimen/text_font_small"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/side_padding"
+        android:src="@mipmap/xm_enter"/>
+
+</RelativeLayout>

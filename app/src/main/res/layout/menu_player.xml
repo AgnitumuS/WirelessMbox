@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ly_player_menu"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey_deep"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/side_padding"
+        android:paddingRight="@dimen/side_padding"
+        android:gravity="center"
+        android:text="配置远程设备："
+        android:textSize="@dimen/text_font_normal"
+        android:textColor="@color/brown_light"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/brown_light"/>
+
+    <RelativeLayout
+        android:id="@+id/lyBoxNetwork"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_bluligalp_tra"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/view_padding"
+            android:layout_toLeftOf="@+id/tv1"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/nav_info"/>
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设备基本信息"
+            android:textColor="@color/text_white"
+            android:textSize="15dip"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_pro_alpha"/>
+
+    <RelativeLayout
+        android:id="@+id/lyBoxWifi"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_bluligalp_tra"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/view_padding"
+            android:layout_toLeftOf="@+id/tv2"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/nav_connwifi"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设备连接WIFI"
+            android:textColor="@color/text_white"
+            android:textSize="15dip"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_pro_alpha"/>
+
+    <RelativeLayout
+        android:id="@+id/lyBoxAp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_bluligalp_tra"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/view_padding"
+            android:layout_toLeftOf="@+id/tv3"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/nav_connap"/>
+
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设置手机热点"
+            android:textColor="@color/text_white"
+            android:textSize="15dip"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_pro_alpha"/>
+
+    <RelativeLayout
+        android:id="@+id/lyBoxRestart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_bluligalp_tra"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/view_padding"
+            android:layout_toLeftOf="@+id/tv5"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/nav_restart"/>
+
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="重启远程设备"
+            android:textColor="@color/text_white"
+            android:textSize="15dip"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_pro_alpha"/>
+
+    <RelativeLayout
+        android:id="@+id/lyBoxReset"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_bluligalp_tra"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/view_padding"
+            android:layout_toLeftOf="@+id/tv4"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/nav_reset"/>
+
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="恢复出厂设置"
+            android:textColor="@color/text_white"
+            android:textSize="15dip"/>
+    </RelativeLayout>
+
+</LinearLayout>
