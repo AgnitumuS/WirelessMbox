@@ -14,10 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        tools:background="@mipmap/ic_album"
+        android:background="@color/grey_light_pro"
         android:minHeight="96dp"
         android:minWidth="96dp"
-        android:scaleType="fitXY"/>
+        android:padding="@dimen/view_small_padding"
+        android:scaleType="fitXY"
+        tools:background="@mipmap/ic_album"/>
 
     <TextView
         android:id="@+id/tvIntro"
