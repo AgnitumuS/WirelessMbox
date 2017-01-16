@@ -10,7 +10,8 @@
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/view_padding"
         android:divider="@color/linedivider"
-        android:dividerHeight="@dimen/side_padding"/>
+        android:dividerHeight="@dimen/view_padding"/>
 
 </LinearLayout>

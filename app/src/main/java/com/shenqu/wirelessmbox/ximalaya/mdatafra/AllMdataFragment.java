@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Created by JongLim on 2017/1/9.
  * 同样包含的热门分类
@@ -53,9 +52,15 @@ public class AllMdataFragment extends BaseFragment {
     private String mCategoryId;
     private String mCategoryName;
     private List<MetaData> mMetaDatas;
-    private int[] indexOfMetas;
+    /**
+     * 创建标签列表 加上手动创建的 无过滤 项
+     */
+    private List<List<Attributes>> mAttrList = new ArrayList<>();
+    private int[] indexOfAttrs;
     private final String[] ATTR_PAY = {/*"不限", */"付费", "免费"};
-    private final String[] ATTR_DIMENSION = {"最火", "最新", "经典"};
+    private final String[] ATTR_DIMENSION = {/*"默认", */"最火", "最新", "经典"};
+    private final String[] CALC_DIMENSION = {"1", "1", "2", "3"};
+
 
     /**
      * 初始化各种layout
@@ -68,19 +73,16 @@ public class AllMdataFragment extends BaseFragment {
         MetaData m = new MetaData();
         //手动添加 ATTR_PAY 和 ATTR_DIMENSION Meta类型
         List<Attributes> as = new ArrayList<>();
-        for (String s : ATTR_DIMENSION) {
+        for (int i = 0; i < ATTR_DIMENSION.length; i++) {
             Attributes a = new Attributes();
-            a.setDisplayName(s);
+            a.setDisplayName(ATTR_DIMENSION[i]);
             a.setAttrKey("");
             a.setAttrValue("");
             as.add(a);
         }
         m.setAttributes(as);
-        m.setDisplayName("全部");
+        m.setDisplayName("默认");
         mMetaDatas.add(m);
-
-        /**初始化metas对应的index数组*/
-        indexOfMetas = new int[mMetaDatas.size()];
 
         //各种标签栏的 content
         LinearLayout tabContent = (LinearLayout) findViewById(R.id.tabContent);
@@ -96,21 +98,24 @@ public class AllMdataFragment extends BaseFragment {
             RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.rcTabContent);
             mRecyclerView.setLayoutManager(linearLayoutManager);
 
-            /**创建标签列表*/
-            List<Attributes> attrs = new ArrayList<>();
             /**将 无过滤 选项手动加入*/
             Attributes attr = new Attributes();
             attr.setAttrKey("");
             attr.setAttrValue("");
             attr.setDisplayName(meta.getDisplayName()); //全部
 
+            List<Attributes> attrs = new ArrayList<>();
             attrs.add(attr);
             attrs.addAll(meta.getAttributes());
-
             mRecyclerView.setAdapter(new TabAdapter(getContext(), attrs, i++));
+
+            mAttrList.add(attrs);
 
             tabContent.addView(view);
         }
+
+        /**初始化metas对应的index数组*/
+        indexOfAttrs = new int[i];
     }
 
     private boolean isLoading = false;
@@ -133,7 +138,7 @@ public class AllMdataFragment extends BaseFragment {
                         mMetaDatas.addAll(metaDataList.getMetaDatas());
 
                     initMetaView();
-                    loadAlbumsData();
+                    loadAlbumsData(true);
                 }
             }
 
@@ -144,23 +149,29 @@ public class AllMdataFragment extends BaseFragment {
         });
     }
 
-    private void loadAlbumsData() {
+    private void loadAlbumsData(boolean isInit) {
         if (isLoading)
             return;
         isLoading = true;
 
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
-        map.put(DTransferConstants.CALC_DIMENSION, "1");//计算维度，现支持最火（1），最新（2），经典或播放最多（3）
-        //map.put(DTransferConstants.TAG_NAME ,"");
-        String attrStr = "";
-        for (int i = 0; i < mMetaDatas.size(); i++) {
-            Attributes attrs = mMetaDatas.get(i).getAttributes().get(indexOfMetas[i]);
-            attrStr += attrs.getAttrKey() + ":" + attrs.getAttrValue() + ";";
+        int i = 0;
+        if (!isInit) {
+            String attrStr = "";
+            for (; i < mAttrList.size(); i++) {
+                Attributes attr = mAttrList.get(i).get(indexOfAttrs[i]);
+                if (attr.getAttrKey().length() > 0) {
+                    //attr_key1:attr_value1;attr_key2:attr_value2
+                    attrStr += attr.getAttrKey() + ":" + attr.getAttrValue() + ";";
+                }
+            }
+            if (attrStr.length() > 2) {
+                JLLog.LOGD(TAG, "attrStr = " + attrStr.substring(0, attrStr.length() - 1));
+                map.put(DTransferConstants.METADATA_ATTRIBUTES, attrStr.substring(0, attrStr.length() - 1));
+            }
         }
-        JLLog.LOGD(TAG, "attrStr = " + attrStr.substring(0, attrStr.lastIndexOf(":")));
-        map.put(DTransferConstants.METADATA_ATTRIBUTES, attrStr.substring(0, attrStr.lastIndexOf(":")));
-        //attr_key1:attr_value1;attr_key2:attr_value2
+        map.put(DTransferConstants.CALC_DIMENSION, CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);//计算维度，现支持最火（1），最新（2），经典或播放最多（3）
         map.put(DTransferConstants.PAGE, "1");
         CommonRequest.getMetadataAlbumList(map, new IDataCallBack<AlbumList>() {
             @Override
@@ -299,10 +310,13 @@ public class AllMdataFragment extends BaseFragment {
 
             Album album = getItem(position);
             if (album != null) {
-                holder.tvTitle.setText(album.getAlbumTitle());
+                if (album.getAlbumTitle() != null)
+                    holder.tvTitle.setText(album.getAlbumTitle());
+                else
+                    holder.tvTitle.setText(album.getLastUptrack().getTrackTitle());
                 holder.tvIntro.setText(album.getAlbumIntro());
                 holder.tvCacl.setText("" + album.getPlayCount());
-                holder.tvScore.setText("" + album.getFavoriteCount());
+                holder.tvScore.setText("" + album.getShareCount());
                 x.image().bind(holder.ivCover, album.getCoverUrlSmall());
             }
             return convertView;
@@ -322,18 +336,17 @@ public class AllMdataFragment extends BaseFragment {
             CheckedTextView tvMeta;
         }
 
-        private int indexOfParent;
-        private CheckedTextView mtv;
+        private int iRow;
         private LayoutInflater mInflater;
         private List<Attributes> mAttrs;
 
         /**
          * 构造函数
          */
-        TabAdapter(Context context, List<Attributes> a, int index) {
+        TabAdapter(Context context, List<Attributes> a, int i) {
             mInflater = LayoutInflater.from(context);
             mAttrs = a;
-            indexOfParent = index;
+            iRow = i;
         }
 
         @Override
@@ -358,24 +371,23 @@ public class AllMdataFragment extends BaseFragment {
          */
         @Override
         public void onBindViewHolder(TabHolder holder, int i) {
+            //JLLog.LOGI(TAG, "------ onBindViewHolder() " + i);
             holder.tvMeta.setText(mAttrs.get(i).getDisplayName());
             holder.tvMeta.setTag(i);
-            holder.tvMeta.setChecked(false);
-            if (i == 0) {
+            if (i == indexOfAttrs[iRow])
                 holder.tvMeta.setChecked(true);
-                mtv = holder.tvMeta;
-            }
+            else
+                holder.tvMeta.setChecked(false);
         }
 
         @Override
         public void onClick(View v) {
-            indexOfMetas[indexOfParent] = (int) v.getTag();
-            JLLog.LOGI(TAG, "onClicked the indexParent = " + indexOfParent + ", " + indexOfMetas[indexOfParent]);
-            mtv.setChecked(false);
-            mtv = (CheckedTextView) v;
-            mtv.setChecked(true);
-            mAlbumList.clear();
-            loadAlbumsData();
+            //JLLog.LOGI(TAG, "onClicked the indexParent = " + iRow + ", " + (int) v.getTag());
+            indexOfAttrs[iRow] = (int) v.getTag();
+            notifyDataSetChanged();
+            if (mAlbumList != null)
+                mAlbumList.clear();
+            loadAlbumsData(false);
         }
     }
 }

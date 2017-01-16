@@ -290,7 +290,7 @@ public class RecommendFragment extends BaseFragment {
             else
                 holder.tvIntro.setText(album.getAlbumIntro());
             holder.tvTitle.setText(album.getAlbumTitle());
-            x.image().bind(holder.ivCover, album.getCoverUrlLarge());
+            x.image().bind(holder.ivCover, album.getCoverUrlMiddle());
             return convertView;
         }
     }
