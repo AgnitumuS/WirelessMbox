@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:background="@color/black_alpha">
 
     <View
         android:id="@+id/statue_bar"
@@ -31,9 +32,9 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/btn_left"
-            android:layout_toLeftOf="@+id/btn_right"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/title_bar_side_margin"
+            android:layout_marginRight="@dimen/title_bar_side_margin"
             android:clickable="false"
             android:gravity="center"
             android:text="@string/app_name"

@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         // create a MenuCreator
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
-            public void create(SwipeMenu menu) {    // create "delete" item
+            public void create(SwipeMenu menu) {    // create "delete" xm_item_album_fragment
                 SwipeMenuItem deleteItem = new SwipeMenuItem(mContext);
                 deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
                 deleteItem.setWidth(JLUtils.dp2px(mContext, 70));
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         // set creator
         mPlayListsView.setMenuCreator(creator);
 
-        // step 2. listener item click event
+        // step 2. listener xm_item_album_fragment click event
         mPlayListsView.setOnMenuItemClickListener(this);
     }
 
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar xm_item_album_fragment clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // Handle navigation view xm_item_album_fragment clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_info) {

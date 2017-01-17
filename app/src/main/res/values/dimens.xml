@@ -43,5 +43,6 @@
     <dimen name="item_img_h">42dp</dimen>
 
     <dimen name="tab_height">48dp</dimen>
+    <dimen name="title_bar_side_margin">36dp</dimen>
 
 </resources>

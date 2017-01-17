@@ -109,7 +109,7 @@ public class TracksFragment extends BaseFragment {
      */
     class RecommendAdapter extends BaseAdapter {
 
-        //重写 ItemClick 事件，为了获取到 ListView 的 item index
+        //重写 ItemClick 事件，为了获取到 ListView 的 xm_item_album_fragment index
         class OnChildItemClickListener implements AdapterView.OnItemClickListener {
             private int parentId;
 
@@ -124,7 +124,7 @@ public class TracksFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Album album = mRecommendAlbums.get(parentId).getAlbumList().get(position);
                 Map<String, String> map = new HashMap<String, String>();
-                JLLog.LOGI(TAG, "you clicked the item " + album.getAlbumTitle());
+                JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + album.getAlbumTitle());
                 mLoading = true;
                 //获取某个专辑的相关推荐
                 map.put(DTransferConstants.ALBUMID, album.getId() + "");
@@ -151,7 +151,7 @@ public class TracksFragment extends BaseFragment {
 
         /**
          * 点击 更多 事件
-         * 重写 ViewClick 事件，为了获取到 ListView 的 item index
+         * 重写 ViewClick 事件，为了获取到 ListView 的 xm_item_album_fragment index
          */
         class OnChildClickListener implements View.OnClickListener {
             private int parentId;
@@ -217,7 +217,7 @@ public class TracksFragment extends BaseFragment {
             holder.more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JLLog.LOGV(TAG, "You click the item " + v.getTag());
+                    JLLog.LOGV(TAG, "You click the xm_item_album_fragment " + v.getTag());
                 }
             });*/
             holder.content.setBackgroundColor(Color.WHITE);

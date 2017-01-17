@@ -19,7 +19,7 @@ import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.TracksFragment;
-import com.shenqu.wirelessmbox.ximalaya.mdatafra.AllMdataFragmentPtrlv;
+import com.shenqu.wirelessmbox.ximalaya.fragment.AllMdataFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -96,7 +96,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
         fragments = new ArrayList<Fragment>();
         for (int i = 0; i < mTagList.size(); i++){
             if (i==0) {
-                fragments.add(new AllMdataFragmentPtrlv());
+                fragments.add(new AllMdataFragment());
             }
             else {
                 fragments.add(new TracksFragment());
@@ -162,7 +162,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 //        mRecommendAlbums = (DiscoveryRecommendAlbums) getIntent().getSerializableExtra("Recommend");
 //
 //        Map<String, String> map = new HashMap<String, String>();
-//        JLLog.LOGI(TAG, "you clicked the item " + mRecommendAlbums.getCategoryName());
+//        JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + mRecommendAlbums.getCategoryName());
 //        mLoading = true;
 //        //获取运营人员为某个分类配置的标签维度专辑推荐模块列表    更多>
 //        map.put(DTransferConstants.CATEGORY_ID, mRecommendAlbums.getCategoryId());
