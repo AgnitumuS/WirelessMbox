@@ -1,8 +1,8 @@
 package com.shenqu.wirelessmbox.ximalaya;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -11,13 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shenqu.wirelessmbox.R;
-import com.shenqu.wirelessmbox.widget.SimpleViewPagerIndicator;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import org.xutils.x;
-
 
 public class AlbumFragmentActivity extends BaseFragmentActivity {
     private static final String TAG = "AlbumActi";
@@ -28,7 +26,11 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     private TextView tvCacl;
     private TextView tvCategory;
 
-    private SimpleViewPagerIndicator mIndicator;
+    /**
+     * 因为这里的 tabLayout 位于view的中部，且要悬浮的效果，所以要用到 StickyNavLayout
+     * StickyNavLayout 需要计算tab高度，这里的tabLayout必须使用其里面的id
+     * */
+    private TabLayout tabLayout;
     private String[] mTitles = new String[]{"详情", "专辑"};
 
     private ViewPager mViewPager;
@@ -57,7 +59,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         tvCacl = (TextView) findViewById(R.id.tvCacl);
         tvCategory = (TextView) findViewById(R.id.tvCategory);
 
-        mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
+        tabLayout = (TabLayout) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
     }
 
@@ -73,8 +75,8 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         }
         tvCategory.setText("分类：" + mAlbum.getAlbumTags());
 
-        mIndicator.setTitles(mTitles);
-        mIndicator.setIndicatorColor(R.color.common_red_alpha);
+//        mIndicator.setTitles(mTitles);
+//        mIndicator.setIndicatorColor(R.color.common_red_alpha);
 
         for (int i = 0; i < mTitles.length; i++) {
             mFragments[i] = AlbumDetailFragment.newInstance(mTitles[i]);
@@ -89,10 +91,17 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
             public Fragment getItem(int position) {
                 return mFragments[position];
             }
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mTitles[position % mTitles.length];
+            }
         };
 
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(0);
+
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     private void initEvents() {
@@ -102,7 +111,8 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
             }
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mIndicator.scroll(position, positionOffset);
+                //mIndicator.scroll(position, positionOffset);
+                tabLayout.setScrollPosition(position, positionOffset, true);
             }
             @Override
             public void onPageScrollStateChanged(int state) {
