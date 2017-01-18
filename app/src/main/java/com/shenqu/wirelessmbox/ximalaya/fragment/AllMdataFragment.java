@@ -124,7 +124,12 @@ public class AllMdataFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 JLLog.LOGI(TAG, "You clicked the " + position + "item.");
-                startActivity(new Intent(getActivity(), AlbumFragmentActivity.class));
+
+                Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable("mAlbum", mAlbumList.get(position));
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
         /**初始化metas对应的index数组*/
@@ -133,7 +138,7 @@ public class AllMdataFragment extends BaseFragment {
 
     private boolean isLoading = false;
 
-    private void loadMetaData() {
+    private void doLoadMetaData() {
         if (isLoading)
             return;
         isLoading = true;
@@ -148,7 +153,7 @@ public class AllMdataFragment extends BaseFragment {
                     mMetaDatas.clear();
                     mMetaDatas.addAll(metaDataList.getMetaDatas());
                     initMetaView();
-                    loadAlbumsData(true);
+                    doLoadAlbumsData(true);
                 }
             }
 
@@ -160,7 +165,7 @@ public class AllMdataFragment extends BaseFragment {
         });
     }
 
-    private void loadAlbumsData(boolean isInit) {
+    private void doLoadAlbumsData(boolean isInit) {
         if (isLoading)
             return;
         isLoading = true;
@@ -225,7 +230,7 @@ public class AllMdataFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase refreshView) {
                 iAlbumPage++;
-                loadAlbumsData(false);
+                doLoadAlbumsData(false);
             }
         });
         return view;
@@ -276,11 +281,11 @@ public class AllMdataFragment extends BaseFragment {
                 });
             }
         });
-        loadMetaData();
+        doLoadMetaData();
     }
 
     public void refresh() {
-        loadMetaData();
+        doLoadMetaData();
     }
 
     @Override
@@ -427,7 +432,7 @@ public class AllMdataFragment extends BaseFragment {
             if (mAlbumList != null)
                 mAlbumList.clear();
             iAlbumPage = 1;
-            loadAlbumsData(false);
+            doLoadAlbumsData(false);
         }
     }
 }

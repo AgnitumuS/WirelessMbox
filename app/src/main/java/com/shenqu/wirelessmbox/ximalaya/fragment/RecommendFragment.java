@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.widget.NoScrollGridView;
+import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.MdataFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
@@ -123,29 +125,13 @@ public class RecommendFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Album album = mRecommendAlbums.get(parentId).getAlbumList().get(position);
-                Map<String, String> map = new HashMap<String, String>();
                 JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + album.getAlbumTitle());
-                mLoading = true;
-                //获取某个专辑的相关推荐
-                map.put(DTransferConstants.ALBUMID, album.getId() + "");
-                CommonRequest.getRelativeAlbums(map, new IDataCallBack<RelativeAlbums>() {
-                    @Override
-                    public void onSuccess(RelativeAlbums relativeAlbums) {
-                        mLoading = false;
-                        if (relativeAlbums != null && relativeAlbums.getRelativeAlbumList() != null) {
-                            String name = "";
-                            for (Album album : relativeAlbums.getRelativeAlbumList()) {
-                                name += album.getAlbumTitle() + "/";
-                            }
-                            JLLog.LOGV(TAG, "RelativeAlbums = " + name);
-                        }
-                    }
 
-                    @Override
-                    public void onError(int i, String s) {
-                        mLoading = false;
-                    }
-                });
+                Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable("mAlbum", album);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         }
 

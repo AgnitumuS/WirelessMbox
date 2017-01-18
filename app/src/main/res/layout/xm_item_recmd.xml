@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/xm_tag"
+            android:paddingLeft="@dimen/view_small_padding"
             android:gravity="center"
             android:text="猜你喜欢"/>
 
@@ -28,6 +29,7 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/shape_press_bluligalp_whi"
             android:drawableRight="@mipmap/xm_enter"
+            android:paddingRight="@dimen/view_small_padding"
             android:gravity="center"
             android:text="更多"
             android:textColor="@color/text_grey_light"/>

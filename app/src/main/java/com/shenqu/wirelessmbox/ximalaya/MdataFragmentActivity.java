@@ -45,7 +45,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 
     private ViewPager mViewPager;
 
-    private boolean mLoading;
+    private boolean isLoading;
     private String mCategoryId;
     private String mCategoryName;
 
@@ -118,14 +118,14 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
     }
 
     private void doLoadMetadataList() {
-        mLoading = true;
+        isLoading = true;
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
         map.put(DTransferConstants.TYPE, "" + 0);
         CommonRequest.getTags(map, new IDataCallBack<TagList>() {
             @Override
             public void onSuccess(TagList tagList) {
-                mLoading = false;
+                isLoading = false;
                 if (tagList != null && tagList.getTagList() != null) {
                     if (mTagList == null){
                         mTagList = new ArrayList<Tag>();
@@ -141,7 +141,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 
             @Override
             public void onError(int i, String s) {
-                mLoading = false;
+                isLoading = false;
             }
         });
     }
@@ -163,14 +163,14 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 //
 //        Map<String, String> map = new HashMap<String, String>();
 //        JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + mRecommendAlbums.getCategoryName());
-//        mLoading = true;
+//        isLoading = true;
 //        //获取运营人员为某个分类配置的标签维度专辑推荐模块列表    更多>
 //        map.put(DTransferConstants.CATEGORY_ID, mRecommendAlbums.getCategoryId());
 //        map.put(DTransferConstants.DISPLAY_COUNT, 10 + "");
 //        CommonRequest.getCategoryRecommendAlbums(map, new IDataCallBack<CategoryRecommendAlbumsList>() {
 //            @Override
 //            public void onSuccess(CategoryRecommendAlbumsList categoryRecommendAlbumsList) {
-//                mLoading = false;
+//                isLoading = false;
 //                if (categoryRecommendAlbumsList != null && categoryRecommendAlbumsList.getCategoryRecommendAlbumses() != null) {
 //                    String name = "";
 //                    for (CategoryRecommendAlbums album : categoryRecommendAlbumsList.getCategoryRecommendAlbumses()) {
@@ -181,7 +181,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 //            }
 //            @Override
 //            public void onError(int i, String s) {
-//                mLoading = false;
+//                isLoading = false;
 //            }
 //        });
     }

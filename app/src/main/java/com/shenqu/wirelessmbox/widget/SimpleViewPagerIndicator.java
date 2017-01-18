@@ -79,13 +79,13 @@ public class SimpleViewPagerIndicator extends LinearLayout {
         int count = mTitles.length;
 
         setWeightSum(count);
-        for (int i = 0; i < count; i++) {
+        for (String mTitle : mTitles) {
             TextView tv = new TextView(getContext());
             LayoutParams lp = new LayoutParams(0, LayoutParams.MATCH_PARENT);
             lp.weight = 1;
             tv.setGravity(Gravity.CENTER);
             tv.setTextColor(COLOR_TEXT_NORMAL);
-            tv.setText(mTitles[i]);
+            tv.setText(mTitle);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             tv.setLayoutParams(lp);
             tv.setOnClickListener(new OnClickListener() {

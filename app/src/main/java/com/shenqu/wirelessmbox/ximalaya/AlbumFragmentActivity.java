@@ -7,18 +7,35 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.widget.SimpleViewPagerIndicator;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
+import com.ximalaya.ting.android.opensdk.model.album.Album;
+
+import org.xutils.x;
+
 
 public class AlbumFragmentActivity extends BaseFragmentActivity {
-    private String[] mTitles = new String[]{"详情", "专辑"};
+    private static final String TAG = "AlbumActi";
+
+    private ImageView ivCover;
+    private TextView tvTitle;
+    private TextView tvAnnouncer;
+    private TextView tvCacl;
+    private TextView tvCategory;
+
     private SimpleViewPagerIndicator mIndicator;
+    private String[] mTitles = new String[]{"详情", "专辑"};
+
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
     private AlbumDetailFragment[] mFragments = new AlbumDetailFragment[mTitles.length];
+
+    public Album mAlbum;
 
     private void initBaseView() {
         setTitleViewBackground(R.color.grey_light_pro_alpha);
@@ -34,20 +51,28 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     }
 
     private void findViews() {
+        ivCover = (ImageView) findViewById(R.id.ivCover);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvAnnouncer = (TextView) findViewById(R.id.tvAnnouncer);
+        tvCacl = (TextView) findViewById(R.id.tvCacl);
+        tvCategory = (TextView) findViewById(R.id.tvCategory);
+
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-
-		/*
-        RelativeLayout ll = (RelativeLayout) findViewById(R.id.id_stickynavlayout_topview);
-		TextView tv = new TextView(this);
-		tv.setText("我的动态添加的");
-		tv.setBackgroundColor(0x77ff0000);
-		ll.addView(tv, new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.MATCH_PARENT, 600));
-		*/
     }
 
     private void initDatas() {
+        x.image().bind(ivCover, mAlbum.getCoverUrlLarge());
+        tvTitle.setText(mAlbum.getAlbumTitle());
+        tvAnnouncer.setText("主播：" + mAlbum.getAnnouncer().getNickname());
+        long count = mAlbum.getPlayCount();
+        if (count > 10000) {
+            tvCacl.setText("播放：" + count / 10000 + "万");
+        } else {
+            tvCacl.setText("播放：" + count);
+        }
+        tvCategory.setText("分类：" + mAlbum.getAlbumTags());
+
         mIndicator.setTitles(mTitles);
         mIndicator.setIndicatorColor(R.color.common_red_alpha);
 
@@ -89,7 +114,8 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.xm_activity_album);
-
+        Bundle bundle = getIntent().getExtras();
+        mAlbum = bundle.getParcelable("mAlbum");
         initBaseView();
         findViews();
         initDatas();
