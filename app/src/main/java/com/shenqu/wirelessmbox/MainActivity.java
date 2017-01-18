@@ -558,7 +558,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     public void onOpenRadio(View view) {
-        mBoxControler.setSyncing(false);
+        //mBoxControler.setSyncing(false);
         Intent intent = new Intent(mContext, MainFragmentActivity.class);
         startActivity(intent);
     }

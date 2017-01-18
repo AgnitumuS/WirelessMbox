@@ -232,7 +232,11 @@ public class BoxControler {
     public void setPlayURI(String path) {
         synchronized (mCtrlLock) {
             iActionType = ActionType.SetAVTransportURI;
-            String uri = "http://" + WirelessUtils.getWifiApIpAddress() + ":" + MyHttpServer.LISTEN_PORT + path;
+            String uri;
+            if (path.startsWith("http://"))
+                uri= path;
+            else
+                uri= "http://" + WirelessUtils.getWifiApIpAddress() + ":" + MyHttpServer.LISTEN_PORT + path;
             mCtrlPairs.clear();
             mCtrlPairs.put("CMD", "HTTPAPI");
             mCtrlPairs.put("JSONREQ", "{\"Req\":\"SetAVTransportURI\",\"Body\":{\"AVTransportURI\":\"" + uri + "\"}}");

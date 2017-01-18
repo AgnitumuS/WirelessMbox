@@ -1,6 +1,8 @@
 package com.shenqu.wirelessmbox.ximalaya;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,12 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shenqu.wirelessmbox.R;
+import com.shenqu.wirelessmbox.action.ActionType;
+import com.shenqu.wirelessmbox.tools.JLJSON;
+import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragmentBk;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragment;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.x;
 
 public class AlbumFragmentActivity extends BaseFragmentActivity {
@@ -31,7 +38,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     /**
      * 因为这里的 tabLayout 位于view的中部，且要悬浮的效果，所以要用到 StickyNavLayout
      * StickyNavLayout 需要计算tab高度，这里的tabLayout必须使用其里面的id
-     * */
+     */
     private TabLayout tabLayout;
     private String[] mTitles = new String[]{"详情", "节目"};
 
@@ -85,10 +92,12 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
             public int getCount() {
                 return mTitles.length;
             }
+
             @Override
             public Fragment getItem(int position) {
                 return mFragments[position];
             }
+
             @Override
             public CharSequence getPageTitle(int position) {
                 return mTitles[position % mTitles.length];
@@ -107,10 +116,12 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
             @Override
             public void onPageSelected(int position) {
             }
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 tabLayout.setScrollPosition(position, positionOffset, true);
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -134,4 +145,26 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         initEvents();
     }
 
+    @Override
+    public boolean handleMessage(Message msg) {
+        super.handleMessage(msg);
+        Bundle b = msg.getData();
+        String string = b.getString("JSONDATA");
+        if (string == null)
+            return false;
+
+        JSONObject jobj = null;
+        try {
+            jobj = new JSONObject(string);
+        } catch (JSONException e) {
+            JLLog.showToast(this, "" + e.getLocalizedMessage());
+            return false;
+        }
+
+        if (msg.what == ActionType.SetAVTransportURI && JLJSON.getInt(jobj, "Result") == 0) {
+            JLLog.showToast(this, "推送成功，播放器在缓冲后将会自动播放~");
+            return true;
+        }
+        return false;
+    }
 }

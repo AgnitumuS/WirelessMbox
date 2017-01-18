@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ import com.shenqu.wirelessmbox.base.BaseApplication;
  * Created by JongLim on 2017/1/9.
  */
 
-public class BaseFragmentActivity extends FragmentActivity {
+public class BaseFragmentActivity extends FragmentActivity implements Handler.Callback{
 
     private View statusBar;
     private View titleView;
@@ -39,6 +41,8 @@ public class BaseFragmentActivity extends FragmentActivity {
     private LinearLayout mBaseLayout;
     // 内容区域的布局
     private View contentView;
+
+    public Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 
         mBaseLayout = (LinearLayout) findViewById(R.id.baseLayout);
         BaseApplication.addActivity(this);
+        mHandler = new Handler(this);
     }
 
     @Override
@@ -256,4 +261,8 @@ public class BaseFragmentActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public boolean handleMessage(Message msg) {
+        return false;
+    }
 }
