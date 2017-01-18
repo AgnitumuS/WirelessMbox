@@ -127,7 +127,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-                System.out.println("淡定  ===  ");
+                //System.out.println("淡定  ===  ");
             }
 
             @Override

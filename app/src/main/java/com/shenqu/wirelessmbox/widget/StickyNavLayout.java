@@ -97,19 +97,10 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
         mMinimumVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
     }
 
-    private void initVelocityTrackerIfNotExists() {
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
+    public void fling(int velocityY) {
+        mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0, mTopViewHeight);
+        invalidate();
     }
-
-    private void recycleVelocityTracker() {
-        if (mVelocityTracker != null) {
-            mVelocityTracker.recycle();
-            mVelocityTracker = null;
-        }
-    }
-
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event)
@@ -163,7 +154,6 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 //        return super.onTouchEvent(event);
 //    }
 
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -192,10 +182,12 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
         mTopViewHeight = mTop.getMeasuredHeight();
     }
 
-
-    public void fling(int velocityY) {
-        mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0, mTopViewHeight);
-        invalidate();
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(0, mScroller.getCurrY());
+            invalidate();
+        }
     }
 
     @Override
@@ -211,11 +203,17 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
         }
     }
 
-    @Override
-    public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(0, mScroller.getCurrY());
-            invalidate();
+    private void initVelocityTrackerIfNotExists() {
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
         }
     }
+
+    private void recycleVelocityTracker() {
+        if (mVelocityTracker != null) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
+    }
+
 }

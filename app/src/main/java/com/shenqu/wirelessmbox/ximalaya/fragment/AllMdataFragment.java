@@ -22,6 +22,7 @@ import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.MdataFragmentActivity;
+import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -49,12 +50,8 @@ public class AllMdataFragment extends BaseFragment {
     private static final String TAG = "AllMdataFra";
     private LayoutInflater mInflater;
 
-    private PullToRefreshListView mListView;
-    private AlbumListAdapter mAlbumAdapter;
-    private List<Album> mAlbumList;
-
-    private String mCategoryId;
     private String mCategoryName;
+    private String mCategoryId;
     private List<MetaData> mMetaDatas = new ArrayList<>();
     /**
      * 创建标签列表 加上手动创建的 无过滤 项
@@ -66,11 +63,15 @@ public class AllMdataFragment extends BaseFragment {
     private final String[] CALC_DIMENSION = {"1", "1", "2", "3"};
     private int iAlbumPage = 1;
 
+    private PullToRefreshListView mListView;
+    private AlbumListAdapter mAlbumsAdapter;
+    private List<Album> mAlbumList = new ArrayList<Album>();
+
     /**
      * 初始化各种layout
      */
     private void initAlbumListView() {
-        mAlbumAdapter.notifyDataSetChanged();
+        mAlbumsAdapter.notifyDataSetChanged();
     }
 
     private void initMetaView() {
@@ -195,10 +196,7 @@ public class AllMdataFragment extends BaseFragment {
             public void onSuccess(AlbumList albumList) {
                 isLoading = false;
                 if (albumList != null && albumList.getAlbums() != null && albumList.getAlbums().size() > 0) {
-                    if (mAlbumList == null)
-                        mAlbumList = albumList.getAlbums();
-                    else
-                        mAlbumList.addAll(albumList.getAlbums());
+                    mAlbumList.addAll(albumList.getAlbums());
                     mListView.onRefreshComplete();
                     initAlbumListView();
                 }
@@ -238,49 +236,15 @@ public class AllMdataFragment extends BaseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated");
 
         mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
         mCategoryName = getActivity().getIntent().getStringExtra("CategoryName");
 
-        mAlbumAdapter = new AlbumListAdapter();
-        mListView.setAdapter(mAlbumAdapter);
-//        mListView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//                JLLog.LOGV(TAG, "onLatItemVisible refresh the list.");
-//            }
-//        });
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Album album = mAlbumList.get(position);
-                Map<String, String> map = new HashMap<String, String>();
-                JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + album.getAlbumTitle());
-                isLoading = true;
-                //获取某个专辑的相关推荐
-                map.put(DTransferConstants.ALBUMID, album.getId() + "");
-                CommonRequest.getRelativeAlbums(map, new IDataCallBack<RelativeAlbums>() {
-                    @Override
-                    public void onSuccess(RelativeAlbums relativeAlbums) {
-                        isLoading = false;
-                        if (relativeAlbums != null && relativeAlbums.getRelativeAlbumList() != null) {
-                            String name = "";
-                            for (Album album : relativeAlbums.getRelativeAlbumList()) {
-                                name += album.getAlbumTitle() + "/";
-                            }
-                            JLLog.LOGV(TAG, "RelativeAlbums = " + name);
-                        }
-                    }
+        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
+        mListView.setAdapter(mAlbumsAdapter);
 
-                    @Override
-                    public void onError(int i, String s) {
-                        isLoading = false;
-                    }
-                });
-            }
-        });
         doLoadMetaData();
     }
 
@@ -294,78 +258,6 @@ public class AllMdataFragment extends BaseFragment {
         super.onDestroyView();
     }
 
-    /**
-     * 发现页 配置的 分类维度 -- ListView
-     */
-    class AlbumListAdapter extends BaseAdapter {
-
-        class AlbumHolder {
-            ViewGroup content;
-            ImageView ivCover;
-            TextView tvTitle;
-            TextView tvIntro;
-            TextView tvCacl;
-            TextView tvInclude;
-        }
-
-        @Override
-        public int getCount() {
-            if (mAlbumList == null) {
-                return 0;
-            }
-            return mAlbumList.size();
-        }
-
-        @Override
-        public Album getItem(int position) {
-            if (mAlbumList != null && mAlbumList.size() > 0)
-                return mAlbumList.get(position);
-            else
-                return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            AlbumHolder holder;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(mActivity).inflate(R.layout.xm_item_meta_album, parent, false);
-                holder = new AlbumHolder();
-                holder.content = (ViewGroup) convertView;
-                holder.ivCover = (ImageView) convertView.findViewById(R.id.ivCover);
-                holder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.tvIntro = (TextView) convertView.findViewById(R.id.tvIntro);
-                holder.tvCacl = (TextView) convertView.findViewById(R.id.tvCacl);
-                holder.tvInclude = (TextView) convertView.findViewById(R.id.tvInclude);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (AlbumHolder) convertView.getTag();
-            }
-
-            Album album = getItem(position);
-            if (album != null) {
-                holder.tvTitle.setText(album.getAlbumTitle());
-                if (album.getAlbumIntro() == null || album.getAlbumIntro().length() == 0)
-                    holder.tvIntro.setText(album.getLastUptrack().getTrackTitle());
-                else
-                    holder.tvIntro.setText(album.getAlbumIntro());
-                long count = album.getPlayCount();
-                if (count > 10000) {
-                    holder.tvCacl.setText("" + count / 10000 + "万");
-                } else {
-                    holder.tvCacl.setText("" + count);
-                }
-                holder.tvInclude.setText(album.getIncludeTrackCount() + "集");
-                x.image().bind(holder.ivCover, album.getCoverUrlSmall());
-            }
-            return convertView;
-        }
-    }
 
     /**
      * 横向listView 即：RecycleView 的 Adapter

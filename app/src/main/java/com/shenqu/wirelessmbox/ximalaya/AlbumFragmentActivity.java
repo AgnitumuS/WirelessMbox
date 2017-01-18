@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
+import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragmentBk;
+import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragment;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import org.xutils.x;
@@ -31,11 +33,11 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
      * StickyNavLayout 需要计算tab高度，这里的tabLayout必须使用其里面的id
      * */
     private TabLayout tabLayout;
-    private String[] mTitles = new String[]{"详情", "专辑"};
+    private String[] mTitles = new String[]{"详情", "节目"};
 
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
-    private AlbumDetailFragment[] mFragments = new AlbumDetailFragment[mTitles.length];
+    private Fragment[] mFragments = new Fragment[mTitles.length];
 
     public Album mAlbum;
 
@@ -64,7 +66,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     }
 
     private void initDatas() {
-        x.image().bind(ivCover, mAlbum.getCoverUrlLarge());
+        x.image().bind(ivCover, mAlbum.getCoverUrlMiddle());
         tvTitle.setText(mAlbum.getAlbumTitle());
         tvAnnouncer.setText("主播：" + mAlbum.getAnnouncer().getNickname());
         long count = mAlbum.getPlayCount();
@@ -75,12 +77,8 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         }
         tvCategory.setText("分类：" + mAlbum.getAlbumTags());
 
-//        mIndicator.setTitles(mTitles);
-//        mIndicator.setIndicatorColor(R.color.common_red_alpha);
-
-        for (int i = 0; i < mTitles.length; i++) {
-            mFragments[i] = AlbumDetailFragment.newInstance(mTitles[i]);
-        }
+        mFragments[0] = AlbumDetailFragment.newInstance(mTitles[0]);
+        mFragments[1] = AlbumTracksFragment.newInstance(mTitles[1]);
 
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -111,7 +109,6 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
             }
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                //mIndicator.scroll(position, positionOffset);
                 tabLayout.setScrollPosition(position, positionOffset, true);
             }
             @Override
@@ -124,11 +121,16 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.xm_activity_album);
+
         Bundle bundle = getIntent().getExtras();
         mAlbum = bundle.getParcelable("mAlbum");
+
         initBaseView();
+
         findViews();
+
         initDatas();
+
         initEvents();
     }
 
