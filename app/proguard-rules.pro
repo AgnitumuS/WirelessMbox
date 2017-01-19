@@ -49,20 +49,6 @@
 #-keep interface android.support.v4.app.** { *; }
 #-keep class android.support.v4.** { *; }
 
--keep class com.nostra13.universalimageloader.** { *; }
--keep public class com.shenqu.sqt.codec.** {
-    *;
- }
-
-########################## 支付宝接口 ##########################
--keep class com.alipay.android.app.IAlixPay{*;}
--keep class com.alipay.android.app.IAlixPay$Stub{*;}
--keep class com.alipay.android.app.IRemoteServiceCallback{*;}
--keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
--keep class com.alipay.sdk.app.PayTask{ public *;}
--keep class com.alipay.sdk.app.AuthTask{ public *;}
--keep class com.shenqu.sqt.alipay.** {*; }
-
 ########################## 喜马拉雅接口 ##########################
 -dontwarn okio.**
 -keep class okio.** { *;}

@@ -69,7 +69,7 @@ public class MyApplication extends BaseApplication {
         MyHttpServer.start();
 
         /**
-         * 喜马拉雅接入
+         * 喜马拉雅接入，用到 xUtil 库
          * */
         x.Ext.init(this);
     }

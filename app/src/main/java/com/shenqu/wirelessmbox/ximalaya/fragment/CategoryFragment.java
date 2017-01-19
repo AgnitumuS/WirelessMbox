@@ -46,11 +46,11 @@ public class CategoryFragment extends BaseFragment {
             return;
         }
         mLoading = true;
-        Map<String, String> param = new HashMap<String, String>();
-        CommonRequest.getCategories(param, new IDataCallBack<CategoryList>() {
+        //Map<String, String> param = new HashMap<String, String>();
+        CommonRequest.getCategories(null, new IDataCallBack<CategoryList>() {
             @Override
             public void onSuccess(CategoryList categoryList) {
-                JLLog.LOGI(TAG, "GetCategories onSuccess " + (categoryList != null));
+                JLLog.LOGV(TAG, "GetCategories onSuccess " + (categoryList != null));
                 if (categoryList != null && categoryList.getCategories() != null && categoryList.getCategories().size() != 0) {
                     if (mCategoryList == null) {
                         mCategoryList = categoryList;

@@ -56,10 +56,11 @@ public class RecommendFragment extends BaseFragment {
         }
         mLoading = true;
         Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.DISPLAY_COUNT, 3 + "");
+        map.put(DTransferConstants.DISPLAY_COUNT, "3");
         CommonRequest.getDiscoveryRecommendAlbums(map, new IDataCallBack<DiscoveryRecommendAlbumsList>() {
             @Override
             public void onSuccess(DiscoveryRecommendAlbumsList albumsList) {
+                JLLog.LOGV(TAG, "getDiscoveryRecommendAlbums onSuccess.");
                 if (albumsList != null && albumsList.getDiscoveryRecommendAlbumses() != null && albumsList.getDiscoveryRecommendAlbumses().size() != 0) {
                     if (mRecommendAlbums == null)
                         mRecommendAlbums = albumsList.getDiscoveryRecommendAlbumses();
@@ -73,6 +74,7 @@ public class RecommendFragment extends BaseFragment {
             @Override
             public void onError(int i, String s) {
                 mLoading = false;
+                JLLog.LOGE(TAG, "getDiscoveryRecommendAlbums onError " + s);
             }
         });
     }
@@ -87,7 +89,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(TAG, "onActivityCreated");
+        JLLog.LOGI(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
 
@@ -102,7 +104,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     public void onDestroyView() {
-        Log.i(TAG, "onDestroyView");
+        JLLog.LOGI(TAG, "onDestroyView");
         super.onDestroyView();
     }
 

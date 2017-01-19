@@ -14,7 +14,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -28,5 +28,4 @@ dependencies {
     compile 'com.zhy:base-adapter:2.0.0'
     compile project(path: ':pulltorefresh')
     compile project(path: ':smarttab')
-    compile files('libs/xutil3.3.6.jar')
 }

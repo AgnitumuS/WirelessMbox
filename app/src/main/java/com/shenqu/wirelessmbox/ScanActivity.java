@@ -212,6 +212,7 @@ public class ScanActivity extends BaseActivity implements Callback, AdapterView.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mHandler.post(mRunnableCancelDialog);
         if (mBroadcast != null) {
             mBroadcast.interrupt();
             mBroadcast.isExited = true;
