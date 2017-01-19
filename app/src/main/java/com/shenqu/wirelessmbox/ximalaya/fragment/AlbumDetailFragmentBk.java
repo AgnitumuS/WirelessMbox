@@ -56,9 +56,6 @@ public class AlbumDetailFragmentBk extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.xm_fragment_album_detailbk, container, false);
-//        tvAlbumIntro = (TextView) view.findViewById(R.id.tvAlbumIntro);
-//        tvAlbumIntro.setText(mAlbum.getAlbumIntro());
-//        tvAnnouncer = (TextView) view.findViewById(R.id.tvAnnouncer);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvAlbumDetail);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

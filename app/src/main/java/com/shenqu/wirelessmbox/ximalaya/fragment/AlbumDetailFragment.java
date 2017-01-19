@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shenqu.wirelessmbox.R;
-import com.shenqu.wirelessmbox.widget.ListViewForScrollView;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;

@@ -113,7 +113,7 @@ public class RecommendFragment extends BaseFragment {
      */
     class RecommendAdapter extends BaseAdapter {
 
-        //重写 ItemClick 事件，为了获取到 ListView 的 xm_item_album_fragment index
+        /**重写 ItemClick 事件，为了获取到 ListView 的 xm_item_album_fragment index*/
         class OnChildItemClickListener implements AdapterView.OnItemClickListener {
             private int parentId;
 
@@ -175,7 +175,6 @@ public class RecommendFragment extends BaseFragment {
         @Override
         public DiscoveryRecommendAlbums getItem(int position) {
             return mRecommendAlbums.get(position);
-
         }
 
         @Override
@@ -201,13 +200,6 @@ public class RecommendFragment extends BaseFragment {
             DiscoveryRecommendAlbums recommend = getItem(position);
             holder.category.setText(recommend.getDisplayCategoryName());
             holder.more.setOnClickListener(new OnChildClickListener(position));
-            /*holder.more.setTag(position);
-            holder.more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    JLLog.LOGV(TAG, "You click the xm_item_album_fragment " + v.getTag());
-                }
-            });*/
             holder.content.setBackgroundColor(Color.WHITE);
             holder.gridview.setAdapter(new GridViewAdapter(recommend.getAlbumList()));
             holder.gridview.setOnItemClickListener(new OnChildItemClickListener(position));

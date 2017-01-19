@@ -20,6 +20,7 @@ import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragmentBk;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragment;
+import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragmentBk;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import org.json.JSONException;
@@ -40,7 +41,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
      * StickyNavLayout 需要计算tab高度，这里的tabLayout必须使用其里面的id
      */
     private TabLayout tabLayout;
-    private String[] mTitles = new String[]{"详情", "节目"};
+    private String[] mTitles = new String[]{"详情", "节目", "测试页", "IRecyclerView"};
 
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
@@ -85,7 +86,9 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         tvCategory.setText("分类：" + mAlbum.getAlbumTags());
 
         mFragments[0] = AlbumDetailFragment.newInstance(mTitles[0]);
-        mFragments[1] = AlbumTracksFragment.newInstance(mTitles[1]);
+        mFragments[1] = AlbumTracksFragment.newInstance(mTitles[1] + "(" + mAlbum.getIncludeTrackCount() + ")");
+        mFragments[2] = AlbumDetailFragmentBk.newInstance(mTitles[2]);
+        mFragments[3] = AlbumTracksFragmentBk.newInstance(mTitles[3]);
 
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -100,7 +103,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
 
             @Override
             public CharSequence getPageTitle(int position) {
-                return mTitles[position % mTitles.length];
+                return mFragments[position].getArguments().getString("title");
             }
         };
 
