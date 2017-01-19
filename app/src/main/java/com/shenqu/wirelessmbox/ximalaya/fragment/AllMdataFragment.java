@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -219,14 +220,14 @@ public class AllMdataFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.xm_fragment_mdata, container, false);
         mListView = (PullToRefreshListView) view.findViewById(R.id.listview);
         mListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase refreshView) {
-                //mListView.onRefreshComplete();
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 iAlbumPage++;
                 doLoadAlbumsData(false);
             }

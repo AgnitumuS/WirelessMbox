@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.shenqu.wirelessmbox.MyApplication;
 import com.shenqu.wirelessmbox.R;
@@ -76,6 +77,19 @@ public class AlbumTracksFragment extends BaseFragment {
                 MyApplication.getControler().setPlayURI(mTrackList.get(position).getPlayUrl64());
             }
         });
+        tracksView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        tracksView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                iTracksPage++;
+                doLoadAlbumDetail();
+            }
+        });
 
         iTracksPage = 1;
         doLoadAlbumDetail();
@@ -90,16 +104,21 @@ public class AlbumTracksFragment extends BaseFragment {
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.ALBUM_ID, mAlbum.getId() + "");
         map.put(DTransferConstants.SORT, "asc");
-        map.put(DTransferConstants.PAGE, ""+iTracksPage);
+        map.put(DTransferConstants.PAGE, "" + iTracksPage);
         CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {
+                tracksView.onRefreshComplete();
                 isLoading = false;
+                if (iTracksPage == 1)
+                    mTrackList.clear();
                 mTrackList.addAll(trackList.getTracks());
                 mTrackAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onError(int i, String s) {
+                tracksView.onRefreshComplete();
                 isLoading = false;
             }
         });

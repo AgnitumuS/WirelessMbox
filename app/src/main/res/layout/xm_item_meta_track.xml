@@ -15,8 +15,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/side_padding"
         android:background="@color/grey_light_pro"
-        android:maxHeight="64dp"
-        android:maxWidth="64dp"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
         android:padding="@dimen/view_small_padding"
         android:scaleType="fitCenter"
         tools:background="@mipmap/ic_music"/>
