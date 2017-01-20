@@ -1,20 +1,22 @@
 package com.shenqu.wirelessmbox.ximalaya.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.aspsine.irecyclerview.IRecyclerView;
+import com.aspsine.irecyclerview.OnLoadMoreListener;
+import com.aspsine.irecyclerview.OnRefreshListener;
 import com.shenqu.wirelessmbox.MyApplication;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
+import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.TrackListAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerTrackAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -28,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumTracksFragment extends BaseFragment {
+public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnRefreshListener, OnLoadMoreListener {
     private static final String TAG = "AlbumFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
@@ -36,89 +38,13 @@ public class AlbumTracksFragment extends BaseFragment {
     private AlbumFragmentActivity mActivity;
     private Album mAlbum;
 
-    private PullToRefreshListView tracksView;
-    private TrackListAdapter mTrackAdapter;
+    private IRecyclerView mRecyclerView;
+    private LoadMoreFooterView mFooterView;
+    private IRecyclerTrackAdapter mTrackAdapter;
     private List<Track> mTrackList;
 
     private boolean isLoading;
     private int iTracksPage;
-
-    private Handler mHandler;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mTitle = getArguments().getString(TITLE);
-        }
-        mActivity = (AlbumFragmentActivity) getActivity();
-        mAlbum = mActivity.mAlbum;
-        mHandler = mActivity.mHandler;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.xm_fragment_album_tracks, container, false);
-
-        tracksView = (PullToRefreshListView) view.findViewById(R.id.tracksView);
-        mTrackList = new ArrayList<>();
-        mTrackAdapter = new TrackListAdapter(mActivity, mTrackList);
-        tracksView.setAdapter(mTrackAdapter);
-        tracksView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                JLLog.LOGI(TAG, "" + mTrackList.get(position).getDownloadUrl());
-                JLLog.LOGI(TAG, "" + mTrackList.get(position).getPlayUrl32());
-                MyApplication.getControler().setHandler(mHandler);
-                MyApplication.getControler().setPlayURI(mTrackList.get(position).getPlayUrl64());
-            }
-        });
-        tracksView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        tracksView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                iTracksPage++;
-                doLoadAlbumDetail();
-            }
-        });
-
-        iTracksPage = 1;
-        doLoadAlbumDetail();
-        return view;
-    }
-
-    private void doLoadAlbumDetail() {
-        if (isLoading)
-            return;
-        isLoading = true;
-        //获取某个专辑的相关推荐
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.ALBUM_ID, mAlbum.getId() + "");
-        map.put(DTransferConstants.SORT, "asc");
-        map.put(DTransferConstants.PAGE, "" + iTracksPage);
-        CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
-            @Override
-            public void onSuccess(TrackList trackList) {
-                tracksView.onRefreshComplete();
-                isLoading = false;
-                if (iTracksPage == 1)
-                    mTrackList.clear();
-                mTrackList.addAll(trackList.getTracks());
-                mTrackAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                tracksView.onRefreshComplete();
-                isLoading = false;
-            }
-        });
-    }
 
     public static AlbumTracksFragment newInstance(String title) {
         AlbumTracksFragment tabFragment = new AlbumTracksFragment();
@@ -128,4 +54,100 @@ public class AlbumTracksFragment extends BaseFragment {
         return tabFragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mTitle = getArguments().getString(TITLE);
+        }
+        mActivity = (AlbumFragmentActivity) getActivity();
+        mAlbum = mActivity.mAlbum;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.xm_fragment_album_tracks, container, false);
+
+        mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //mRecyclerView.addHeaderView(bannerView);
+
+        mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
+
+        mTrackList = new ArrayList<>();
+        mTrackAdapter = new IRecyclerTrackAdapter(mTrackList);
+        mTrackAdapter.setOnItemClickListener(this);
+
+        mRecyclerView.setAdapter(mTrackAdapter);
+        mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setOnLoadMoreListener(this);
+
+        iTracksPage = 1;
+        doLoadAlbumTracks();
+        return view;
+    }
+
+    private void doLoadAlbumTracks() {
+        if (isLoading)
+            return;
+        isLoading = true;
+        //获取某个专辑的相关推荐
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(DTransferConstants.ALBUM_ID, "" + mAlbum.getId());
+        map.put(DTransferConstants.SORT, "asc");
+        map.put(DTransferConstants.PAGE, "" + iTracksPage);
+        map.put(DTransferConstants.PAGE_SIZE, "" + 5);
+        CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
+            @Override
+            public void onSuccess(TrackList trackList) {
+                JLLog.LOGV(TAG, "getTracks onSuccess.");
+                if (trackList == null || trackList.getTracks() == null || trackList.getTracks().size() == 0) {
+                    mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                } else {
+                    mFooterView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                        }
+                    }, 2000);
+                    isLoading = false;
+                    if (iTracksPage == 1)
+                        mTrackList.clear();
+                    mTrackList.addAll(trackList.getTracks());
+                    mTrackAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                JLLog.LOGE(TAG, "getTracks onSuccess.");
+                mFooterView.setStatus(LoadMoreFooterView.Status.ERROR);
+                isLoading = false;
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(int position, Track track, View v) {
+        JLLog.LOGI(TAG, "" + mTrackList.get(position).getDownloadUrl());
+        JLLog.LOGI(TAG, "" + mTrackList.get(position).getPlayUrl32());
+        MyApplication.getControler().setHandler(mActivity.mHandler);
+        MyApplication.getControler().setPlayURI(mTrackList.get(position).getPlayUrl64());
+    }
+
+    @Override
+    public void onRefresh() {
+        mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+        iTracksPage = 1;
+        doLoadAlbumTracks();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (mFooterView.canLoadMore() && mTrackAdapter.getItemCount() > 0) {
+            mFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            iTracksPage++;
+            doLoadAlbumTracks();
+        }
+    }
 }

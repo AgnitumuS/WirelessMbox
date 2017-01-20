@@ -17,4 +17,5 @@
         android:layout_height="@dimen/view_padding"
         android:layout_marginTop="@dimen/side_padding"
         android:background="@color/linedivider"/>
+
 </LinearLayout>

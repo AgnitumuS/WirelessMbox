@@ -2,6 +2,7 @@ package com.shenqu.wirelessmbox.ximalaya;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -51,9 +52,9 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private AnnouncerFragment mAnnouncerFragment;
 
     private void initBaseView() {
-        setTitleViewBackground(R.color.grey_light_pro_alpha);
+        setTitleViewBackground(Color.RED);
         setTitle("喜马拉雅");
-        setTitleColor(R.color.text_grey);
+        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

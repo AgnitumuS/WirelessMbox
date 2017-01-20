@@ -50,7 +50,8 @@
             android:background="@drawable/shape_frame_grelig_tra_corner"
             android:divider="@color/grey"
             android:dividerHeight="1dp"
-            android:listSelector="@drawable/shape_bluligalp_tra"/>
+            android:listSelector="@drawable/shape_bluligalp_tra"
+            tools:listitem="@layout/item_files"/>
 
         <!--action button-->
         <LinearLayout

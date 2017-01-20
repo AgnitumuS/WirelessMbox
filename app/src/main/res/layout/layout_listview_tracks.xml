@@ -2,6 +2,7 @@
 <LinearLayout
     android:id="@+id/lyPlayActList"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -34,6 +35,7 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:listSelector="@drawable/shape_bluligalp_tra"
-        android:smoothScrollbar="true"/>
+        android:smoothScrollbar="true"
+        tools:listitem="@layout/item_musicinfo"/>
 
 </LinearLayout>

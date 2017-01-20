@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -141,7 +139,7 @@ public class PlayerActivity extends BaseActivity implements Handler.Callback, Bo
     }
 
     private void initTrackListWindow(LayoutInflater inflater) {
-        View listLayout = inflater.inflate(R.layout.listview_tracks, null);
+        View listLayout = inflater.inflate(R.layout.layout_listview_tracks, null);
         listLayout.setFocusableInTouchMode(true);
         mTvListTitle = (TextView) listLayout.findViewById(R.id.tvListTitle);
         mTvListTitle.setText("音响歌曲列表");

@@ -23,6 +23,10 @@ public class LoadMoreFooterView extends FrameLayout {
 
     private OnRetryListener mOnRetryListener;
 
+    public interface OnRetryListener {
+        void onRetry(LoadMoreFooterView view);
+    }
+
     public LoadMoreFooterView(Context context) {
         this(context, null);
     }
@@ -33,11 +37,11 @@ public class LoadMoreFooterView extends FrameLayout {
 
     public LoadMoreFooterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.ircv_load_more_footer_view, this, true);
+        LayoutInflater.from(context).inflate(R.layout.widget_load_more_footer, this, true);
 
-        mLoadingView = findViewById(R.id.loadingView);
-        mErrorView = findViewById(R.id.errorView);
-        mTheEndView = findViewById(R.id.theEndView);
+        mLoadingView = findViewById(R.id.progressBar);
+        mErrorView = findViewById(R.id.tvError);
+        mTheEndView = findViewById(R.id.tvTheEnd);
 
         mErrorView.setOnClickListener(new OnClickListener() {
             @Override
@@ -53,6 +57,13 @@ public class LoadMoreFooterView extends FrameLayout {
 
     public void setOnRetryListener(OnRetryListener listener) {
         this.mOnRetryListener = listener;
+    }
+
+    /**
+     * LoadMore是否enabled
+     * */
+    public enum Status {
+        GONE, LOADING, ERROR, THE_END
     }
 
     public Status getStatus() {
@@ -94,14 +105,6 @@ public class LoadMoreFooterView extends FrameLayout {
                 mTheEndView.setVisibility(VISIBLE);
                 break;
         }
-    }
-
-    public enum Status {
-        GONE, LOADING, ERROR, THE_END
-    }
-
-    public interface OnRetryListener {
-        void onRetry(LoadMoreFooterView view);
     }
 
 }

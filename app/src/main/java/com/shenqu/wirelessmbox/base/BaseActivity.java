@@ -40,7 +40,7 @@ public class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_base);
+        setContentView(R.layout.activity_base);
 
         statusBar = findViewById(R.id.statue_bar);
         if (!setTranslucentStatus()) {

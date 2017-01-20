@@ -1,11 +1,9 @@
 package com.shenqu.wirelessmbox.ximalaya.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,12 +19,12 @@ import java.util.List;
 /**
  * 发现页 配置的 分类维度 -- ListView
  */
-public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
+public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
 
-    private List<Track> mTrackList;
+    private List<Track> mList;
     private OnItemClickListener<Track> mOnItemClickListener;
 
-    private class TrackHolder extends IViewHolder{
+    private class ViewHolder  extends IViewHolder{
         ViewGroup content;
         ImageView ivCover;
         TextView tvIntro;
@@ -34,7 +32,7 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
         TextView tvDuration;
         TextView tvUpdateTime;
 
-        TrackHolder(View view) {
+        ViewHolder (View view) {
             super(view);
             content = (ViewGroup) view;
             ivCover = (ImageView) view.findViewById(R.id.ivCover);
@@ -45,8 +43,8 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
         }
     }
 
-    public IRecyclerAdapter(List<Track> tracks) {
-        mTrackList = tracks;
+    public IRecyclerTrackAdapter(List<Track> datas) {
+        mList = datas;
     }
 
     public void setOnItemClickListener(OnItemClickListener<Track> listener) {
@@ -54,8 +52,8 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
     }
 
     public Track getItem(int position) {
-        if (mTrackList != null && mTrackList.size() > 0)
-            return mTrackList.get(position);
+        if (mList != null && mList.size() > 0)
+            return mList.get(position);
         else
             return null;
     }
@@ -63,7 +61,7 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
     @Override
     public IViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.xm_item_meta_track, parent, false);
-        final TrackHolder holder = new TrackHolder(view);
+        final ViewHolder  holder = new ViewHolder (view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +74,7 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
                  * {@code IViewHolder.getIAdapterPosition()}
                  */
                 final int position = holder.getIAdapterPosition();
-                final Track track= mTrackList.get(position);
+                final Track track= mList.get(position);
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(position, track, v);
                 }
@@ -89,7 +87,7 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
     @Override
     public void onBindViewHolder(IViewHolder holde, int position) {
         Track track = getItem(position);
-        TrackHolder holder = (TrackHolder) holde;
+        ViewHolder  holder = (ViewHolder ) holde;
         if (track != null) {
             if (track.getTrackIntro() == null || track.getTrackIntro().length() == 0)
                 holder.tvIntro.setText(track.getTrackTitle());
@@ -121,10 +119,10 @@ public class IRecyclerAdapter extends RecyclerView.Adapter<IViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (mTrackList == null) {
+        if (mList == null) {
             return 0;
         }
-        return mTrackList.size();
+        return mList.size();
     }
 
     private String formatMsToDate(long ms) {

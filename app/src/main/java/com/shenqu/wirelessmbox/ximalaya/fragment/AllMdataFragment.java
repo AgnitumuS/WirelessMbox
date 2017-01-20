@@ -10,32 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.MdataFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.ListAlbumAdapter;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
-import com.ximalaya.ting.android.opensdk.model.album.RelativeAlbums;
 import com.ximalaya.ting.android.opensdk.model.metadata.Attributes;
 import com.ximalaya.ting.android.opensdk.model.metadata.MetaData;
 import com.ximalaya.ting.android.opensdk.model.metadata.MetaDataList;
-
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,7 +58,7 @@ public class AllMdataFragment extends BaseFragment {
     private int iAlbumPage = 1;
 
     private PullToRefreshListView mListView;
-    private AlbumListAdapter mAlbumsAdapter;
+    private ListAlbumAdapter mAlbumsAdapter;
     private List<Album> mAlbumList = new ArrayList<Album>();
 
     /**
@@ -91,7 +84,7 @@ public class AllMdataFragment extends BaseFragment {
         mMetaDatas.add(m);
 
         //各种标签栏的 content
-        LinearLayout scroll_tab = (LinearLayout) mInflater.inflate(R.layout.scroll_tablayout, (ViewGroup) getView(), false);
+        LinearLayout scroll_tab = (LinearLayout) mInflater.inflate(R.layout.layout_scroll_tablayout, (ViewGroup) getView(), false);
         LinearLayout tabContent = (LinearLayout) scroll_tab.findViewById(R.id.tabContent);
 
         int i = 0;
@@ -218,7 +211,7 @@ public class AllMdataFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mInflater = inflater;
         View view = inflater.inflate(R.layout.xm_fragment_mdata, container, false);
-        mListView = (PullToRefreshListView) view.findViewById(R.id.listview);
+        mListView = (PullToRefreshListView) view.findViewById(R.id.albumsView);
         mListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -243,7 +236,7 @@ public class AllMdataFragment extends BaseFragment {
         mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
         mCategoryName = getActivity().getIntent().getStringExtra("CategoryName");
 
-        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
+        mAlbumsAdapter = new ListAlbumAdapter(mActivity, mAlbumList);
         mListView.setAdapter(mAlbumsAdapter);
 
         doLoadMetaData();

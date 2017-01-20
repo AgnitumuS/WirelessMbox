@@ -44,7 +44,7 @@
 -keep public class * extends android.content.ContentProvider    # 保持哪些类不被混淆
 -keep public class * extends android.app.backup.BackupAgentHelper # 保持哪些类不被混淆
 -keep public class * extends android.preference.Preference        # 保持哪些类不被混淆
-#-keep public class * extends android.support.v4.**    #如果有引用v4包可以添加这行
+-keep public class * extends android.support.v4.**    #如果有引用v4包可以添加这行
 
 #-keep interface android.support.v4.app.** { *; }
 #-keep class android.support.v4.** { *; }

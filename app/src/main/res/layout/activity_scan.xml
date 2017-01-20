@@ -51,8 +51,8 @@
         android:layout_marginLeft="@dimen/side_padding"
         android:layout_marginRight="@dimen/side_padding"
         android:background="@drawable/shape_frame_bluligalp_corner"
-        android:listSelector="@drawable/shape_bluligalp_tra">
-    </ListView>
+        android:listSelector="@drawable/shape_bluligalp_tra"
+        tools:listitem="@layout/item_devinfo"/>
 
     <LinearLayout
         android:id="@+id/btnBar"

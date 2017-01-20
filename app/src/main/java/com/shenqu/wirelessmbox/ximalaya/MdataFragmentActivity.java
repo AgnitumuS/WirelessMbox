@@ -89,7 +89,7 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
     private void initView() {
         mBtnAllCate = (TextView) findViewById(R.id.btnAllCate);
         ViewGroup tabContent = (ViewGroup) findViewById(R.id.tabContent);
-        tabContent.addView(LayoutInflater.from(this).inflate(R.layout.smart_tablayout, tabContent, false));
+        tabContent.addView(LayoutInflater.from(this).inflate(R.layout.layout_smart_tablayout, tabContent, false));
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.smartTabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 

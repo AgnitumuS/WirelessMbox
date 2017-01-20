@@ -1,7 +1,7 @@
 package com.shenqu.wirelessmbox.ximalaya;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,9 +18,7 @@ import com.shenqu.wirelessmbox.tools.JLJSON;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
-import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragmentBk;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragment;
-import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragmentBk;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import org.json.JSONException;
@@ -41,7 +39,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
      * StickyNavLayout 需要计算tab高度，这里的tabLayout必须使用其里面的id
      */
     private TabLayout tabLayout;
-    private String[] mTitles = new String[]{"详情", "节目", "测试页", "IRecyclerView"};
+    private String[] mTitles = new String[]{"详情", "节目"};
 
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
@@ -50,9 +48,9 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     public Album mAlbum;
 
     private void initBaseView() {
-        setTitleViewBackground(R.color.grey_light_pro_alpha);
+        setTitleViewBackground(Color.RED);
         setTitle("专辑详情");
-        setTitleColor(R.color.text_grey);
+        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,8 +85,6 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
 
         mFragments[0] = AlbumDetailFragment.newInstance(mTitles[0]);
         mFragments[1] = AlbumTracksFragment.newInstance(mTitles[1] + "(" + mAlbum.getIncludeTrackCount() + ")");
-        mFragments[2] = AlbumDetailFragmentBk.newInstance(mTitles[2]);
-        mFragments[3] = AlbumTracksFragmentBk.newInstance(mTitles[3]);
 
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override

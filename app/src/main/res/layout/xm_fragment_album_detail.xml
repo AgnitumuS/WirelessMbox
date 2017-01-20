@@ -1,70 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.aspsine.irecyclerview.IRecyclerView
+    android:id="@+id/iRecyclerView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:background="@color/white">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/side_padding"
-            android:text="内容简介"
-            android:textSize="@dimen/text_font_normal"/>
-
-        <TextView
-            android:id="@+id/tvAlbumIntro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/side_padding"
-            tools:text="内容"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/service_item_padding"
-            android:background="@color/linedivider"/>
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/side_padding"-->
-            <!--android:text="主播简介"-->
-            <!--android:textSize="@dimen/text_font_normal"/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/tvAnnouncer"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/side_padding"-->
-            <!--tools:text="采采主持人，段子来了"/>-->
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/service_item_padding"-->
-            <!--android:background="@color/linedivider"/>-->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/side_padding"
-            android:text="精彩推荐"
-            android:textSize="@dimen/text_font_normal"/>
-
-        <ListView
-            android:id="@+id/rvAlbumDetail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:scrollbars="none"
-            tools:background="@color/white"
-            tools:listitem="@layout/xm_item_meta_album"/>
-    </LinearLayout>
-
-</LinearLayout>
+    tools:background="@color/white"
+    tools:listitem="@layout/xm_item_meta_album"/>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:background="@color/black"
+    tools:background="@color/grey"
     tools:context=".ximalaya.base.BaseFragmentActivity">
 
     <View
@@ -49,10 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/view_padding"
             android:layout_toLeftOf="@+id/btn_right"
             android:layout_toRightOf="@id/btn_left"
+            android:background="@color/transparent"
             android:clickable="false"
             android:hint="搜索内容"
+            android:maxLines="1"
             android:textColor="@color/text_white"
             android:textColorHint="@color/white_alpha"
             android:textCursorDrawable="@null"
@@ -73,7 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/view_padding"
+            android:layout_marginBottom="1dp"
+            android:layout_toLeftOf="@+id/btn_right"
+            android:layout_toRightOf="@id/btn_left"
             android:background="@color/white_alpha"
             android:visibility="gone"/>
 

@@ -48,7 +48,7 @@ public class BaseFragmentActivity extends FragmentActivity implements Handler.Ca
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.activity_fragment);
 
         statusBar = findViewById(R.id.statue_bar);
         if (!setTranslucentStatus()) {

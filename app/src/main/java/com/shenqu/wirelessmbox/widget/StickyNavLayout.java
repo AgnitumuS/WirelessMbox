@@ -20,28 +20,23 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        Log.e(TAG, "onStartNestedScroll");
+        ////Log.d(TAG, "onStartNestedScroll");
         return true;
     }
 
     @Override
     public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
-        Log.e(TAG, "onNestedScrollAccepted");
+        ////Log.d(TAG, "onNestedScrollAccepted");
     }
 
     @Override
     public void onStopNestedScroll(View target) {
-        Log.e(TAG, "onStopNestedScroll");
-    }
-
-    @Override
-    public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        Log.e(TAG, "onNestedScroll");
+        // //Log.d(TAG, "onStopNestedScroll");
     }
 
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-        Log.e(TAG, "onNestedPreScroll");
+        //Log.d(TAG, "onNestedPreScroll");
         boolean hiddenTop = dy > 0 && getScrollY() < mTopViewHeight;
         boolean showTop = dy < 0 && getScrollY() >= 0 && !ViewCompat.canScrollVertically(target, -1);
 
@@ -52,14 +47,19 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
     }
 
     @Override
+    public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+        ////Log.d(TAG, "onNestedScroll");
+    }
+
+    @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-        Log.e(TAG, "onNestedFling");
+        //Log.d(TAG, "onNestedFling");
         return false;
     }
 
     @Override
     public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
-        Log.e(TAG, "onNestedPreFling");
+        //Log.d(TAG, "onNestedPreFling");
         //down - //up+
         if (getScrollY() >= mTopViewHeight)
             return false;
@@ -69,7 +69,7 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 
     @Override
     public int getNestedScrollAxes() {
-        Log.e(TAG, "getNestedScrollAxes");
+        //Log.d(TAG, "getNestedScrollAxes");
         return 0;
     }
 
@@ -103,15 +103,13 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
     }
 
 //    @Override
-//    public boolean onTouchEvent(MotionEvent event)
-//    {
+//    public boolean onTouchEvent(MotionEvent event) {
 //        initVelocityTrackerIfNotExists();
 //        mVelocityTracker.addMovement(event);
 //        int action = event.getAction();
 //        float y = event.getY();
 //
-//        switch (action)
-//        {
+//        switch (action) {
 //            case MotionEvent.ACTION_DOWN:
 //                if (!mScroller.isFinished())
 //                    mScroller.abortAnimation();
@@ -120,12 +118,10 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 //            case MotionEvent.ACTION_MOVE:
 //                float dy = y - mLastY;
 //
-//                if (!mDragging && Math.abs(dy) > mTouchSlop)
-//                {
+//                if (!mDragging && Math.abs(dy) > mTouchSlop) {
 //                    mDragging = true;
 //                }
-//                if (mDragging)
-//                {
+//                if (mDragging) {
 //                    scrollBy(0, (int) -dy);
 //                }
 //
@@ -134,8 +130,7 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 //            case MotionEvent.ACTION_CANCEL:
 //                mDragging = false;
 //                recycleVelocityTracker();
-//                if (!mScroller.isFinished())
-//                {
+//                if (!mScroller.isFinished()) {
 //                    mScroller.abortAnimation();
 //                }
 //                break;
@@ -143,8 +138,7 @@ public class StickyNavLayout extends LinearLayout implements NestedScrollingPare
 //                mDragging = false;
 //                mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
 //                int velocityY = (int) mVelocityTracker.getYVelocity();
-//                if (Math.abs(velocityY) > mMinimumVelocity)
-//                {
+//                if (Math.abs(velocityY) > mMinimumVelocity) {
 //                    fling(-velocityY);
 //                }
 //                recycleVelocityTracker();

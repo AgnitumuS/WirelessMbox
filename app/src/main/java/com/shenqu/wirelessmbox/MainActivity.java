@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void initTrackListWindow(LayoutInflater inflater) {
-        View listLayout = inflater.inflate(R.layout.listview_tracks, null);
+        View listLayout = inflater.inflate(R.layout.layout_listview_tracks, null);
         listLayout.setFocusableInTouchMode(true);
         mTracksAdapter = new TrackAdapter(mContext, mLocalTracks);
         mTvListTitle = (TextView) listLayout.findViewById(R.id.tvListTitle);

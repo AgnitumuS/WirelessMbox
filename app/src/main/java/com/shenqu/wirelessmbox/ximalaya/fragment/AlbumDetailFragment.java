@@ -2,15 +2,20 @@ package com.shenqu.wirelessmbox.ximalaya.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aspsine.irecyclerview.IRecyclerView;
+import com.aspsine.irecyclerview.OnLoadMoreListener;
+import com.aspsine.irecyclerview.OnRefreshListener;
 import com.shenqu.wirelessmbox.R;
+import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -22,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumDetailFragment extends Fragment {
+public class AlbumDetailFragment extends Fragment implements OnItemClickListener<Album>, OnRefreshListener, OnLoadMoreListener {
     private static final String TAG = "AlbumFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
@@ -32,8 +37,9 @@ public class AlbumDetailFragment extends Fragment {
 
     private TextView tvAlbumIntro;
     private TextView tvAnnouncer;
-    private ListView mRecyclerView;
-    private AlbumListAdapter mAlbumsAdapter;
+    private IRecyclerView mRecyclerView;
+    private LoadMoreFooterView mFooterView;
+    private IRecyclerAlbumAdapter mAlbumsAdapter;
     private List<Album> mAlbumList;
 
     private boolean isLoading;
@@ -51,14 +57,25 @@ public class AlbumDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.xm_fragment_album_detail, container, false);
-        tvAlbumIntro = (TextView) view.findViewById(R.id.tvAlbumIntro);
-        tvAlbumIntro.setText(mAlbum.getAlbumIntro());
-        tvAnnouncer = (TextView) view.findViewById(R.id.tvAnnouncer);
+        mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mRecyclerView = (ListView) view.findViewById(R.id.rvAlbumDetail);
         mAlbumList = new ArrayList<>();
-        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
+        mAlbumsAdapter = new IRecyclerAlbumAdapter(mAlbumList);
+        mAlbumsAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAlbumsAdapter);
+
+        mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setOnLoadMoreListener(this);
+
+        View childView = inflater.inflate(R.layout.xm_layout_album_detail, mRecyclerView.getHeaderContainer(), false);
+        tvAlbumIntro = (TextView) childView.findViewById(R.id.tvAlbumIntro);
+        tvAnnouncer = (TextView) childView.findViewById(R.id.tvAnnouncer);
+        tvAlbumIntro.setText(mAlbum.getAlbumIntro());
+        tvAnnouncer.setText(mAlbum.getAnnouncer().getNickname());
+
+        mRecyclerView.addHeaderView(childView);
+        mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
 
         doLoadAlbumDetail();
         return view;
@@ -95,4 +112,18 @@ public class AlbumDetailFragment extends Fragment {
         return tabFragment;
     }
 
+    @Override
+    public void onItemClick(int position, Album album, View v) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
 }

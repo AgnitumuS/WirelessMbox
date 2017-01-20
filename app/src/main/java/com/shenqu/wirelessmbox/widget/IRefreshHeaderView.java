@@ -43,7 +43,7 @@ public class IRefreshHeaderView extends RelativeLayout implements RefreshTrigger
     public IRefreshHeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        inflate(context, R.layout.ircv_refresh_header_view, this);
+        inflate(context, R.layout.widget_refresh_header, this);
 
         tvRefresh = (TextView) findViewById(R.id.tvRefresh);
         ivArrow = (ImageView) findViewById(R.id.ivArrow);
