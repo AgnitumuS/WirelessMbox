@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnRefreshListener, OnLoadMoreListener {
+public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnLoadMoreListener, OnRefreshListener {
     private static final String TAG = "AlbumFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
@@ -78,8 +78,7 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
         mTrackAdapter = new IRecyclerTrackAdapter(mTrackList);
         mTrackAdapter.setOnItemClickListener(this);
 
-        mRecyclerView.setAdapter(mTrackAdapter);
-        mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setIAdapter(mTrackAdapter);
         mRecyclerView.setOnLoadMoreListener(this);
 
         iTracksPage = 1;
@@ -96,7 +95,6 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
         map.put(DTransferConstants.ALBUM_ID, "" + mAlbum.getId());
         map.put(DTransferConstants.SORT, "asc");
         map.put(DTransferConstants.PAGE, "" + iTracksPage);
-        map.put(DTransferConstants.PAGE_SIZE, "" + 5);
         CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {
@@ -104,12 +102,7 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
                 if (trackList == null || trackList.getTracks() == null || trackList.getTracks().size() == 0) {
                     mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                 } else {
-                    mFooterView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
-                        }
-                    }, 2000);
+                    mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                     isLoading = false;
                     if (iTracksPage == 1)
                         mTrackList.clear();
@@ -117,7 +110,6 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
                     mTrackAdapter.notifyDataSetChanged();
                 }
             }
-
             @Override
             public void onError(int i, String s) {
                 JLLog.LOGE(TAG, "getTracks onSuccess.");
@@ -129,17 +121,8 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
 
     @Override
     public void onItemClick(int position, Track track, View v) {
-        JLLog.LOGI(TAG, "" + mTrackList.get(position).getDownloadUrl());
-        JLLog.LOGI(TAG, "" + mTrackList.get(position).getPlayUrl32());
         MyApplication.getControler().setHandler(mActivity.mHandler);
         MyApplication.getControler().setPlayURI(mTrackList.get(position).getPlayUrl64());
-    }
-
-    @Override
-    public void onRefresh() {
-        mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
-        iTracksPage = 1;
-        doLoadAlbumTracks();
     }
 
     @Override
@@ -149,5 +132,11 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
             iTracksPage++;
             doLoadAlbumTracks();
         }
+        else mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }

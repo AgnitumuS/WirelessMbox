@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,6 @@ import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.DiscoveryRecommendAlbums;
 import com.ximalaya.ting.android.opensdk.model.album.DiscoveryRecommendAlbumsList;
-import com.ximalaya.ting.android.opensdk.model.album.RelativeAlbums;
 
 import org.xutils.x;
 

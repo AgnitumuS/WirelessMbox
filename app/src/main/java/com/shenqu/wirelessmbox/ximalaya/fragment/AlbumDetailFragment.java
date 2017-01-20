@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumDetailFragment extends Fragment implements OnItemClickListener<Album>, OnRefreshListener, OnLoadMoreListener {
+public class AlbumDetailFragment extends Fragment implements OnItemClickListener<Album> {
     private static final String TAG = "AlbumFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
@@ -38,7 +38,6 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
     private TextView tvAlbumIntro;
     private TextView tvAnnouncer;
     private IRecyclerView mRecyclerView;
-    private LoadMoreFooterView mFooterView;
     private IRecyclerAlbumAdapter mAlbumsAdapter;
     private List<Album> mAlbumList;
 
@@ -58,15 +57,12 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.xm_fragment_album_detail, container, false);
         mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         mAlbumList = new ArrayList<>();
         mAlbumsAdapter = new IRecyclerAlbumAdapter(mAlbumList);
         mAlbumsAdapter.setOnItemClickListener(this);
-        mRecyclerView.setAdapter(mAlbumsAdapter);
-
-        mRecyclerView.setOnRefreshListener(this);
-        mRecyclerView.setOnLoadMoreListener(this);
+        mRecyclerView.setIAdapter(mAlbumsAdapter);
 
         View childView = inflater.inflate(R.layout.xm_layout_album_detail, mRecyclerView.getHeaderContainer(), false);
         tvAlbumIntro = (TextView) childView.findViewById(R.id.tvAlbumIntro);
@@ -75,7 +71,6 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
         tvAnnouncer.setText(mAlbum.getAnnouncer().getNickname());
 
         mRecyclerView.addHeaderView(childView);
-        mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
 
         doLoadAlbumDetail();
         return view;
@@ -114,16 +109,6 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
 
     @Override
     public void onItemClick(int position, Album album, View v) {
-
-    }
-
-    @Override
-    public void onRefresh() {
-
-    }
-
-    @Override
-    public void onLoadMore() {
 
     }
 }
