@@ -183,8 +183,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mFavoriteTracks = new ArrayList<>();
         //listType = 2， 从本地已有.json文件获取歌曲列表
         mOtherTracks = new ArrayList<>();
-        initTrackList(mLocalTracks, 1);
-        initTrackList(mFavoriteTracks, 1);
+        initTrackList(mLocalTracks, 0);
+        initTrackList(mFavoriteTracks, 0);
         mTracks = mLocalTracks;
         //初始化声音列表窗口，这个将是动态创建的的view
         initTrackListWindow(LayoutInflater.from(mContext));
@@ -225,10 +225,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mTracksAdapter = new TrackAdapter(mContext, mLocalTracks);
         mTvListTitle = (TextView) listLayout.findViewById(R.id.tvListTitle);
         mPullRefreshListView = (PullToRefreshListView) listLayout.findViewById(R.id.tracksView);
+        /**
+         * 当 mListView 为 PullToRefreshListView 时，position从1开始，当添加了HeadView时 position从2开始
+         */
         mPullRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                initTrackList(mTracks, position);
+                initTrackList(mTracks, position - 1);
                 if (mTracks.equals(mLocalTracks)) {
                     mBoxControler.setPlayURI(FileUtils.getLocalListPath());
                 }else if (mTracks.equals(mFavoriteTracks)){
@@ -554,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mTvListTitle.setText("喜欢歌曲列表：");
         mTvListTitle.setTextColor(Color.RED);
         mTracks = mFavoriteTracks;
-        initTrackList(mFavoriteTracks, 1);
+        initTrackList(mFavoriteTracks, 0);
         changeListWindowState();
     }
 

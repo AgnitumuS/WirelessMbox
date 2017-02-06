@@ -17,8 +17,8 @@ import com.shenqu.wirelessmbox.action.ActionType;
 import com.shenqu.wirelessmbox.tools.JLJSON;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumDetailFragment;
-import com.shenqu.wirelessmbox.ximalaya.fragment.AlbumTracksFragment;
+import com.shenqu.wirelessmbox.ximalaya.childfragment.AlbumDetailFragment;
+import com.shenqu.wirelessmbox.ximalaya.childfragment.AlbumTracksFragment;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import org.json.JSONException;

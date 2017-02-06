@@ -284,7 +284,7 @@ public class BoxControler {
     public void seekTo(int index, int dif) {
         if (dif != 0)
             index = mPlayerState.CurrentTrack + dif;
-        if (index < 1 || mPlayerState.NumberOfTracks < index)
+        if (index < 0 || mPlayerState.NumberOfTracks < index)
             return;
         synchronized (mCtrlLock) {
             iActionType = ActionType.PlayerDoNext;

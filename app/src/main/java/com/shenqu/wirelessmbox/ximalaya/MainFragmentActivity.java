@@ -2,7 +2,6 @@ package com.shenqu.wirelessmbox.ximalaya;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,14 +16,13 @@ import android.view.View;
 
 import com.shenqu.wirelessmbox.MyApplication;
 import com.shenqu.wirelessmbox.R;
-import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.base.XimalayaSDK;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.tools.JLUtils;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
+import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AnnouncerFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.CategoryFragment;
-import com.shenqu.wirelessmbox.ximalaya.fragment.RadiosFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.RankFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.RecommendFragment;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -42,12 +40,12 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private static final String TAG = "MainFragAct";
     private Context mContext;
 
-    private final String[] CONTENT = new String[]{"推荐", "分类", "广播", "榜单", "主播"};
+    private final String[] CONTENT = new String[]{"推荐", "分类", "榜单", "主播"};
     private ViewPager mViewPager;
     private BaseFragment mCurrFragment;
     private RecommendFragment mRecommendFragment;
     private CategoryFragment mCategoryFragment;
-    private RadiosFragment mRadiosFragment;
+    //private RadiosFragment mRadiosFragment;
     private RankFragment mRankFragment;
     private AnnouncerFragment mAnnouncerFragment;
 
@@ -112,13 +110,11 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 } else if (1 == position) {
                     mCurrFragment = mCategoryFragment;
                 } else if (2 == position) {
-                    mCurrFragment = mRadiosFragment;
-                } else if (3 == position) {
                     mCurrFragment = mRankFragment;
                     if (mCurrFragment != null) {
                         mCurrFragment.refresh();
                     }
-                } else if (4 == position) {
+                } else if (3 == position) {
                     mCurrFragment = mAnnouncerFragment;
                     if (mCurrFragment != null) {
                         mCurrFragment.refresh();
@@ -201,16 +197,11 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                 }
                 f = mCategoryFragment;
             } else if (2 == position) {
-                if (mRadiosFragment == null) {
-                    mRadiosFragment = new RadiosFragment();
-                }
-                f = mRadiosFragment;
-            } else if (3 == position) {
                 if (mRankFragment == null) {
                     mRankFragment = new RankFragment();
                 }
                 f = mRankFragment;
-            } else if (4 == position) {
+            } else if (3 == position) {
                 if (mAnnouncerFragment == null) {
                     mAnnouncerFragment = new AnnouncerFragment();
                 }

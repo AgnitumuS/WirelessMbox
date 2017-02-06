@@ -1,4 +1,4 @@
-package com.shenqu.wirelessmbox.ximalaya.fragment;
+package com.shenqu.wirelessmbox.ximalaya.childfragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +14,6 @@ import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
 import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerTrackAdapter;
 import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;

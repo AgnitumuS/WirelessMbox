@@ -14,12 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/side_padding"
-        android:background="@color/grey_light_pro"
+        android:layout_marginRight="@dimen/view_padding"
         android:minHeight="48dp"
         android:minWidth="48dp"
-        android:padding="@dimen/view_small_padding"
-        android:scaleType="fitCenter"
-        tools:background="@mipmap/ic_music"/>
+        tools:src="@mipmap/ic_music"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"

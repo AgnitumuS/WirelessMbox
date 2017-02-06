@@ -148,6 +148,9 @@ public class PlayerActivity extends BaseActivity implements Handler.Callback, Bo
         mTracksAdapter = new TrackAdapter(this, mTracks);
         mPullRefreshListView = (PullToRefreshListView) listLayout.findViewById(R.id.tracksView);
         mPullRefreshListView.setAdapter(mTracksAdapter);
+        /**
+         * 当 mListView 为 PullToRefreshListView 时，position从1开始，当添加了HeadView时 position从2开始
+         */
         mPullRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

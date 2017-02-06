@@ -16,9 +16,8 @@ import android.widget.TextView;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.shenqu.wirelessmbox.R;
-import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.fragment.TracksFragment;
+import com.shenqu.wirelessmbox.ximalaya.childfragment.AlbumListFragment;
 import com.shenqu.wirelessmbox.ximalaya.fragment.AllMdataFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -41,11 +40,9 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
     private TextView mBtnAllCate;
 
     private ArrayList<Fragment> fragments;
-    private BaseFragment mCurrFragment;
 
     private ViewPager mViewPager;
 
-    private boolean isLoading;
     private String mCategoryId;
     private String mCategoryName;
 
@@ -99,7 +96,12 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
                 fragments.add(new AllMdataFragment());
             }
             else {
-                fragments.add(new TracksFragment());
+                AlbumListFragment fragment = new AlbumListFragment();
+                Bundle b = new Bundle();
+                b.putString("TAGNAME", mTagList.get(i).getTagName());
+                b.putString("CATEGORYID", mCategoryId);
+                fragment.setArguments(b);
+                fragments.add(fragment);
             }
         }
 
@@ -118,14 +120,12 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
     }
 
     private void doLoadMetadataList() {
-        isLoading = true;
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
         map.put(DTransferConstants.TYPE, "" + 0);
         CommonRequest.getTags(map, new IDataCallBack<TagList>() {
             @Override
             public void onSuccess(TagList tagList) {
-                isLoading = false;
                 if (tagList != null && tagList.getTagList() != null) {
                     if (mTagList == null){
                         mTagList = new ArrayList<Tag>();
@@ -141,7 +141,6 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 
             @Override
             public void onError(int i, String s) {
-                isLoading = false;
             }
         });
     }
@@ -157,33 +156,6 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
 
         initBaseView();
         doLoadMetadataList();
-//        initView();
-//
-//        mRecommendAlbums = (DiscoveryRecommendAlbums) getIntent().getSerializableExtra("Recommend");
-//
-//        Map<String, String> map = new HashMap<String, String>();
-//        JLLog.LOGI(TAG, "you clicked the xm_item_album_fragment " + mRecommendAlbums.getCategoryName());
-//        isLoading = true;
-//        //获取运营人员为某个分类配置的标签维度专辑推荐模块列表    更多>
-//        map.put(DTransferConstants.CATEGORY_ID, mRecommendAlbums.getCategoryId());
-//        map.put(DTransferConstants.DISPLAY_COUNT, 10 + "");
-//        CommonRequest.getCategoryRecommendAlbums(map, new IDataCallBack<CategoryRecommendAlbumsList>() {
-//            @Override
-//            public void onSuccess(CategoryRecommendAlbumsList categoryRecommendAlbumsList) {
-//                isLoading = false;
-//                if (categoryRecommendAlbumsList != null && categoryRecommendAlbumsList.getCategoryRecommendAlbumses() != null) {
-//                    String name = "";
-//                    for (CategoryRecommendAlbums album : categoryRecommendAlbumsList.getCategoryRecommendAlbumses()) {
-//                        name += album.getDisPlayTagName() + "/";
-//                    }
-//                    JLLog.LOGV(TAG, "CategoryRecommendAlbums = " + name);
-//                }
-//            }
-//            @Override
-//            public void onError(int i, String s) {
-//                isLoading = false;
-//            }
-//        });
     }
 
     class SlidingPagerAdapter extends FragmentPagerAdapter {
@@ -225,23 +197,6 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
         public void onPageSelected(int position) {
             // TODO Auto-generated method stub
             mViewPager.setCurrentItem(position);
-            //                if (0 == position) {
-//                    mCurrFragment = mRecommendFragment;
-//                } else if (1 == position) {
-//                    mCurrFragment = mCategoryFragment;
-//                } else if (2 == position) {
-//                    mCurrFragment = mRadiosFragment;
-//                } else if (3 == position) {
-//                    mCurrFragment = mRankFragment;
-//                    if (mCurrFragment != null) {
-//                        mCurrFragment.refresh();
-//                    }
-//                } else if (4 == position) {
-//                    mCurrFragment = mAnnouncerFragment;
-//                    if (mCurrFragment != null) {
-//                        mCurrFragment.refresh();
-//                    }
-//                }
         }
     };
 

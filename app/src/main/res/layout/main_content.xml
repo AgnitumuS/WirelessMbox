@@ -77,7 +77,7 @@
             android:gravity="center"
             android:onClick="onOpenFavorite"
             android:text="我的最爱"
-            android:textColor="@color/grn_press_gre_dis_gre"/>
+            android:textColor="@color/blu_press_gre_dis_gre"/>
 
         <TextView
             android:id="@+id/tvNetSongs"
@@ -89,7 +89,7 @@
             android:drawableTop="@drawable/ic_main_netsong"
             android:gravity="center"
             android:text="网络音乐"
-            android:textColor="@color/grn_press_gre_dis_gre"/>
+            android:textColor="@color/blu_press_gre_dis_gre"/>
 
         <TextView
             android:id="@+id/tvNetRadio"
@@ -102,7 +102,7 @@
             android:gravity="center"
             android:onClick="onOpenRadio"
             android:text="网络电台"
-            android:textColor="@color/grn_press_gre_dis_gre"/>
+            android:textColor="@color/blu_press_gre_dis_gre"/>
 
     </LinearLayout>
 
@@ -130,7 +130,7 @@
             android:onClick="onCreateList"
             android:padding="@dimen/side_padding"
             android:text="创建列表"
-            android:textColor="@color/grn_press_gre_dis_gre"/>
+            android:textColor="@color/blu_press_gre_dis_gre"/>
 
         <ImageView
             android:id="@+id/tvRecent"
@@ -142,7 +142,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/side_padding"
             android:src="@drawable/ic_main_recent"
-            android:textColor="@color/grn_press_gre_dis_gre"/>
+            android:textColor="@color/blu_press_gre_dis_gre"/>
 
     </LinearLayout>
 

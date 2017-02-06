@@ -18,12 +18,12 @@ import java.util.List;
 /**
  * 发现页 配置的 分类维度 -- ListView
  */
-public class ListAlbumAdapter extends BaseAdapter {
+public class AlbumListAdapter extends BaseAdapter {
 
     private List<Album> mAlbumList;
     private Context mContext;
 
-    public ListAlbumAdapter(Context context, List<Album> albumList) {
+    public AlbumListAdapter(Context context, List<Album> albumList) {
         mAlbumList = albumList;
         mContext = context;
     }

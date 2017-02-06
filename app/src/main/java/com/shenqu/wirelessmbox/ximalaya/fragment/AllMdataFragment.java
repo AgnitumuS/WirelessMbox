@@ -19,7 +19,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.ListAlbumAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -58,15 +58,8 @@ public class AllMdataFragment extends BaseFragment {
     private int iAlbumPage = 1;
 
     private PullToRefreshListView mListView;
-    private ListAlbumAdapter mAlbumsAdapter;
+    private AlbumListAdapter mAlbumsAdapter;
     private List<Album> mAlbumList = new ArrayList<Album>();
-
-    /**
-     * 初始化各种layout
-     */
-    private void initAlbumListView() {
-        mAlbumsAdapter.notifyDataSetChanged();
-    }
 
     private void initMetaView() {
         MetaData m = new MetaData();
@@ -115,14 +108,17 @@ public class AllMdataFragment extends BaseFragment {
         }
 
         mListView.getRefreshableView().addHeaderView(scroll_tab);
+        /**
+         * 当 mListView 为 PullToRefreshListView 时，position从1开始，当添加了HeadView时 position从2开始
+         */
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                JLLog.LOGI(TAG, "You clicked the " + position + "item.");
+                JLLog.LOGI(TAG, "You clicked the " + position + " item.");
 
                 Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
                 Bundle b = new Bundle();
-                b.putParcelable("mAlbum", mAlbumList.get(position));
+                b.putParcelable("mAlbum", mAlbumList.get(position - 2));
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -192,7 +188,7 @@ public class AllMdataFragment extends BaseFragment {
                 if (albumList != null && albumList.getAlbums() != null && albumList.getAlbums().size() > 0) {
                     mAlbumList.addAll(albumList.getAlbums());
                     mListView.onRefreshComplete();
-                    initAlbumListView();
+                    mAlbumsAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -236,7 +232,7 @@ public class AllMdataFragment extends BaseFragment {
         mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
         mCategoryName = getActivity().getIntent().getStringExtra("CategoryName");
 
-        mAlbumsAdapter = new ListAlbumAdapter(mActivity, mAlbumList);
+        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
         mListView.setAdapter(mAlbumsAdapter);
 
         doLoadMetaData();

@@ -197,7 +197,7 @@ public class FileUtils {
             public void run() {
                 synchronized (fileName) {
                     //将 list 转换成 String
-                    String string = getJSONFromList(list, begin - 1);
+                    String string = getJSONFromList(list, begin);
                     try {
                         File saveFile = new File(fileName);
                         File dir = new File(saveFile.getParent());

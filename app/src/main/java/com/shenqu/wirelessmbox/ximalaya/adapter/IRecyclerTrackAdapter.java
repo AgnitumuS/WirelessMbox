@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.aspsine.irecyclerview.IViewHolder;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLUtils;
+import com.shenqu.wirelessmbox.widget.CircleImageView;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
     private List<Track> mList;
     private OnItemClickListener<Track> mOnItemClickListener;
 
-    private class ViewHolder  extends IViewHolder{
+    private class ViewHolder extends IViewHolder {
         ViewGroup content;
         ImageView ivCover;
         TextView tvIntro;
@@ -32,7 +34,7 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
         TextView tvDuration;
         TextView tvUpdateTime;
 
-        ViewHolder (View view) {
+        ViewHolder(View view) {
             super(view);
             content = (ViewGroup) view;
             ivCover = (ImageView) view.findViewById(R.id.ivCover);
@@ -61,7 +63,7 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
     @Override
     public IViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.xm_item_meta_track, parent, false);
-        final ViewHolder  holder = new ViewHolder (view);
+        final ViewHolder holder = new ViewHolder(view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +76,7 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
                  * {@code IViewHolder.getIAdapterPosition()}
                  */
                 final int position = holder.getIAdapterPosition();
-                final Track track= mList.get(position);
+                final Track track = mList.get(position);
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(position, track, v);
                 }
@@ -87,7 +89,7 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
     @Override
     public void onBindViewHolder(IViewHolder holde, int position) {
         Track track = getItem(position);
-        ViewHolder  holder = (ViewHolder ) holde;
+        ViewHolder holder = (ViewHolder) holde;
         if (track != null) {
             if (track.getTrackIntro() == null || track.getTrackIntro().length() == 0)
                 holder.tvIntro.setText(track.getTrackTitle());
@@ -108,7 +110,8 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
                 holder.tvUpdateTime.setText("今天");
             else
                 holder.tvUpdateTime.setText(up + "天前");
-            x.image().bind(holder.ivCover, track.getCoverUrlSmall());
+            ImageOptions options = new ImageOptions.Builder().setFailureDrawableId(R.mipmap.ic_music).setUseMemCache(true).setCircular(true).build();
+            x.image().bind(holder.ivCover, track.getCoverUrlSmall(), options);
         }
     }
 

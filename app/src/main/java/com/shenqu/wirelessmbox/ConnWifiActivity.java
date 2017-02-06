@@ -110,7 +110,6 @@ public class ConnWifiActivity extends BaseActivity implements Handler.Callback, 
         mWifisView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                //ToDo work to refresh the list here.
                 doGetWifiList();
             }
         });
@@ -144,6 +143,9 @@ public class ConnWifiActivity extends BaseActivity implements Handler.Callback, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        /**
+         * 当 mListView 为 PullToRefreshListView 时，position从1开始，当添加了HeadView时 position从2开始
+         */
         mSelectedItem = mWifis.get(position - 1);
         mAdapter.setCurName(mSelectedItem.getSsid());
         mAdapter.notifyDataSetChanged();
