@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 
 import com.aspsine.irecyclerview.IRecyclerView;
 import com.aspsine.irecyclerview.OnLoadMoreListener;
-import com.aspsine.irecyclerview.OnRefreshListener;
 import com.shenqu.wirelessmbox.MyApplication;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
-import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerTrackAdapter;
 import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
@@ -29,7 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnLoadMoreListener, OnRefreshListener {
+/**
+ * Created by JongLim on 2017/1/9.
+ * Activity for AlbumFragmentActivity.
+ * */
+
+public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnLoadMoreListener {
     private static final String TAG = "AlbumFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
@@ -65,7 +69,7 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.xm_fragment_album_tracks, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_tracks, container, false);
 
         mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -134,8 +138,4 @@ public class AlbumTracksFragment extends BaseFragment implements OnItemClickList
         else mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
     }
 
-    @Override
-    public void onRefresh() {
-
-    }
 }

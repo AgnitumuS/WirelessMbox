@@ -1,4 +1,4 @@
-package com.shenqu.wirelessmbox.ximalaya.fragment;
+package com.shenqu.wirelessmbox.ximalaya.childfragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,18 +9,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.aspsine.irecyclerview.IRecyclerView;
+import com.aspsine.irecyclerview.OnLoadMoreListener;
+import com.aspsine.irecyclerview.OnRefreshListener;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
-import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
+import com.shenqu.wirelessmbox.widget.IRefreshHeaderView;
+import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
+import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -37,33 +39,49 @@ import java.util.Map;
 
 /**
  * Created by JongLim on 2017/1/9.
- * 同样包含的热门分类
+ * MdataFragmentActivity 下面 SmartTabLayout 对应的 Fragment
  */
 
-public class AllMdataFragment extends BaseFragment {
+public class AllMdataFragment extends BaseFragment implements OnItemClickListener<Album>, OnRefreshListener, OnLoadMoreListener {
     private static final String TAG = "AllMdataFra";
     private LayoutInflater mInflater;
 
-    private String mCategoryName;
     private String mCategoryId;
-    private List<MetaData> mMetaDatas = new ArrayList<>();
+    private String categoryName;
+    private List<MetaData> mMetaDatas;
     /**
      * 创建标签列表 加上手动创建的 无过滤 项
+     * mMetaDatas 最终解析出来后将元素 存储于mAttrList
      */
     private List<List<Attributes>> mAttrList = new ArrayList<>();
-    private int[] indexOfAttrs;
+    private int[] iSelectedAttr;
+    
     private final String[] ATTR_PAY = {/*"不限", */"付费", "免费"};
     private final String[] ATTR_DIMENSION = {/*"默认", */"最火", "最新", "经典"};
-    private final String[] CALC_DIMENSION = {"1", "1", "2", "3"};
+    private final String[] CALC_DIMENSION = {"1", "1", "2", "3"};//计算维度，现支持最火（1），最新（2），经典或播放最多（3）
     private int iAlbumPage = 1;
 
-    private PullToRefreshListView mListView;
-    private AlbumListAdapter mAlbumsAdapter;
-    private List<Album> mAlbumList = new ArrayList<Album>();
+    private IRecyclerView mRecyclerView;
+    private LoadMoreFooterView mFooterView;
+    private IRefreshHeaderView mRefreshView;
+    private IRecyclerAlbumAdapter mAlbumsAdapter;
+    private List<Album> mAlbumList;
+
+    private boolean isLoading = false;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
+        categoryName = getActivity().getIntent().getStringExtra("CategoryName");
+        mMetaDatas = new ArrayList<>();
+        mAlbumList = new ArrayList<>();
+    }
 
     private void initMetaView() {
         MetaData m = new MetaData();
-        //手动添加 ATTR_PAY 和 ATTR_DIMENSION Meta类型
+
+        //手动添加 ATTR_DIMENSION Meta 类型
         List<Attributes> as = new ArrayList<>();
         for (String st : ATTR_DIMENSION) {
             Attributes a = new Attributes();
@@ -72,24 +90,25 @@ public class AllMdataFragment extends BaseFragment {
             a.setAttrValue("");
             as.add(a);
         }
+
         m.setAttributes(as);
         m.setDisplayName("默认");
         mMetaDatas.add(m);
 
         //各种标签栏的 content
-        LinearLayout scroll_tab = (LinearLayout) mInflater.inflate(R.layout.layout_scroll_tablayout, (ViewGroup) getView(), false);
-        LinearLayout tabContent = (LinearLayout) scroll_tab.findViewById(R.id.tabContent);
+        View header = mInflater.inflate(R.layout.xm_layout_tab_content, mRecyclerView.getHeaderContainer(), false);
+        LinearLayout tabLayout = (LinearLayout) header.findViewById(R.id.tabLayoutContainer);
 
-        int i = 0;
+        int i = 0;  //mMetaDatas size, 也作为 Attrs 行数
         for (MetaData meta : mMetaDatas) {
-            //设置布局管理器
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
             //包含标签栏
-            View view = mInflater.inflate(R.layout.xm_item_tabholder, tabContent, false);
-            RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.rcTabContent);
-            mRecyclerView.setLayoutManager(linearLayoutManager);
+            View tabContainer = mInflater.inflate(R.layout.xm_item_tabholder, tabLayout, false);
+            RecyclerView rcTabView = (RecyclerView) tabContainer.findViewById(R.id.rcTabView);
+
+            //为RecyclerView设置布局管理器
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            rcTabView.setLayoutManager(layoutManager);
 
             /**将 无过滤 选项手动加入*/
             Attributes attr = new Attributes();
@@ -100,34 +119,60 @@ public class AllMdataFragment extends BaseFragment {
             List<Attributes> attrs = new ArrayList<>();
             attrs.add(attr);
             attrs.addAll(meta.getAttributes());
-            mRecyclerView.setAdapter(new TabAdapter(getContext(), attrs, i++));
-
+            rcTabView.setAdapter(new TabAdapter(getContext(), attrs, i++));
             mAttrList.add(attrs);
 
-            tabContent.addView(view);
+            tabLayout.addView(tabContainer);
         }
 
-        mListView.getRefreshableView().addHeaderView(scroll_tab);
-        /**
-         * 当 mListView 为 PullToRefreshListView 时，position从1开始，当添加了HeadView时 position从2开始
-         */
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                JLLog.LOGI(TAG, "You clicked the " + position + " item.");
+        mRecyclerView.addHeaderView(header);
+        mRecyclerView.setIAdapter(mAlbumsAdapter);
+        mRecyclerView.setOnLoadMoreListener(this);
 
-                Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
-                Bundle b = new Bundle();
-                b.putParcelable("mAlbum", mAlbumList.get(position - 2));
-                intent.putExtras(b);
-                startActivity(intent);
-            }
-        });
         /**初始化metas对应的index数组*/
-        indexOfAttrs = new int[i];
+        iSelectedAttr = new int[i];
     }
 
-    private boolean isLoading = false;
+    private void doLoadAlbumsData(boolean isInit) {
+        if (isLoading)
+            return;
+        isLoading = true;
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
+        if (!isInit) {
+            String attrStr = "";
+            for (int i = 0; i < mAttrList.size(); i++) {
+                Attributes attr = mAttrList.get(i).get(iSelectedAttr[i]);
+                if (attr.getAttrKey().length() > 0) {
+                    //attr_key1:attr_value1;attr_key2:attr_value2
+                    attrStr += attr.getAttrKey() + ":" + attr.getAttrValue() + ";";
+                }
+            }
+            if (attrStr.length() > 2) {
+                map.put(DTransferConstants.METADATA_ATTRIBUTES, attrStr.substring(0, attrStr.length() - 1));
+            }
+        }
+
+        map.put(DTransferConstants.CALC_DIMENSION, CALC_DIMENSION[iSelectedAttr[iSelectedAttr.length - 1]]);
+        map.put(DTransferConstants.PAGE, "" + iAlbumPage);
+        JLLog.LOGI(TAG, "getMetadataAlbumList param = " + map.toString());
+        CommonRequest.getMetadataAlbumList(map, new IDataCallBack<AlbumList>() {
+            @Override
+            public void onSuccess(AlbumList albumList) {
+                isLoading = false;
+                if (albumList != null && albumList.getAlbums() != null && albumList.getAlbums().size() > 0) {
+                    mAlbumList.addAll(albumList.getAlbums());
+                    mAlbumsAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onError(int i, String s) {
+                JLLog.showToast(getActivity(), "加载失败~");
+                isLoading = false;
+            }
+        });
+    }
 
     private void doLoadMetaData() {
         if (isLoading)
@@ -156,90 +201,19 @@ public class AllMdataFragment extends BaseFragment {
         });
     }
 
-    private void doLoadAlbumsData(boolean isInit) {
-        if (isLoading)
-            return;
-        isLoading = true;
-
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
-        int i = 0;
-        if (!isInit) {
-            String attrStr = "";
-            for (; i < mAttrList.size(); i++) {
-                Attributes attr = mAttrList.get(i).get(indexOfAttrs[i]);
-                if (attr.getAttrKey().length() > 0) {
-                    //attr_key1:attr_value1;attr_key2:attr_value2
-                    attrStr += attr.getAttrKey() + ":" + attr.getAttrValue() + ";";
-                }
-            }
-            if (attrStr.length() > 2) {
-                JLLog.LOGI(TAG, "attrStr = " + CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);
-                map.put(DTransferConstants.METADATA_ATTRIBUTES, attrStr.substring(0, attrStr.length() - 1));
-            }
-        }
-
-        map.put(DTransferConstants.CALC_DIMENSION, CALC_DIMENSION[indexOfAttrs[indexOfAttrs.length - 1]]);//计算维度，现支持最火（1），最新（2），经典或播放最多（3）
-        map.put(DTransferConstants.PAGE, "" + iAlbumPage);
-        CommonRequest.getMetadataAlbumList(map, new IDataCallBack<AlbumList>() {
-            @Override
-            public void onSuccess(AlbumList albumList) {
-                isLoading = false;
-                if (albumList != null && albumList.getAlbums() != null && albumList.getAlbums().size() > 0) {
-                    mAlbumList.addAll(albumList.getAlbums());
-                    mListView.onRefreshComplete();
-                    mAlbumsAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                JLLog.showToast(getActivity(), "加载失败~");
-                isLoading = false;
-                mListView.onRefreshComplete();
-            }
-
-        });
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mInflater = inflater;
-        View view = inflater.inflate(R.layout.xm_fragment_mdata, container, false);
-        mListView = (PullToRefreshListView) view.findViewById(R.id.albumsView);
-        mListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+        View view = mInflater.inflate(R.layout.xm_fragment_albums, container, false);
+        mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            }
+        mAlbumsAdapter = new IRecyclerAlbumAdapter(mAlbumList);
+        mAlbumsAdapter.setOnItemClickListener(this);
+        mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                iAlbumPage++;
-                doLoadAlbumsData(false);
-            }
-        });
+        doLoadMetaData();
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
-
-        mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
-        mCategoryName = getActivity().getIntent().getStringExtra("CategoryName");
-
-        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
-        mListView.setAdapter(mAlbumsAdapter);
-
-        doLoadMetaData();
-    }
-
-    public void refresh() {
-        doLoadMetaData();
     }
 
     @Override
@@ -248,6 +222,33 @@ public class AllMdataFragment extends BaseFragment {
         super.onDestroyView();
     }
 
+    @Override
+    public void onItemClick(int position, Album album, View v) {
+        JLLog.LOGI(TAG, "You clicked the " + position + " item.");
+
+        Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelable("mAlbum", mAlbumList.get(position));
+        intent.putExtras(b);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        iAlbumPage = 1;
+        mAlbumList.clear();
+        doLoadAlbumsData(true);
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (mFooterView.canLoadMore() && mAlbumsAdapter.getItemCount() > 0) {
+            mFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            iAlbumPage++;
+            doLoadAlbumsData(false);
+        } else
+            mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+    }
 
     /**
      * 横向listView 即：RecycleView 的 Adapter
@@ -258,7 +259,6 @@ public class AllMdataFragment extends BaseFragment {
             TabHolder(View itemView) {
                 super(itemView);
             }
-
             CheckedTextView tvMeta;
         }
 
@@ -300,7 +300,7 @@ public class AllMdataFragment extends BaseFragment {
             //JLLog.LOGI(TAG, "------ onBindViewHolder() " + i);
             holder.tvMeta.setText(mAttrs.get(i).getDisplayName());
             holder.tvMeta.setTag(i);
-            if (i == indexOfAttrs[iRow])
+            if (i == iSelectedAttr[iRow])
                 holder.tvMeta.setChecked(true);
             else
                 holder.tvMeta.setChecked(false);
@@ -308,8 +308,7 @@ public class AllMdataFragment extends BaseFragment {
 
         @Override
         public void onClick(View v) {
-            //JLLog.LOGI(TAG, "onClicked the indexParent = " + iRow + ", " + (int) v.getTag());
-            indexOfAttrs[iRow] = (int) v.getTag();
+            iSelectedAttr[iRow] = (int) v.getTag();
             notifyDataSetChanged();
             if (mAlbumList != null)
                 mAlbumList.clear();
@@ -317,4 +316,5 @@ public class AllMdataFragment extends BaseFragment {
             doLoadAlbumsData(false);
         }
     }
+
 }

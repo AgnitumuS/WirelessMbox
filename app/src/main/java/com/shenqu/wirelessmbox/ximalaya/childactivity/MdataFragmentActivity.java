@@ -1,7 +1,8 @@
-package com.shenqu.wirelessmbox.ximalaya;
+package com.shenqu.wirelessmbox.ximalaya.childactivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +19,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.childfragment.AlbumListFragment;
-import com.shenqu.wirelessmbox.ximalaya.fragment.AllMdataFragment;
+import com.shenqu.wirelessmbox.ximalaya.childfragment.AllMdataFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -32,7 +33,8 @@ import java.util.Map;
 
 /**
  * Created by JongLim on 2016/12/13.
- */
+ * Activity for recommend fragment.
+ * */
 
 public class MdataFragmentActivity extends BaseFragmentActivity {
     private static final String TAG = "MetaActi";
@@ -53,8 +55,8 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
      */
     private void initBaseView() {
         setTitle(mCategoryName);
-        setTitleViewBackground(R.color.white);
-        setTitleColor(R.color.text_grey);
+        setTitleViewBackground(Color.RED);
+        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

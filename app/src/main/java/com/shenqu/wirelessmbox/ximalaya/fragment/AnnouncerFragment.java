@@ -54,7 +54,7 @@ public class AnnouncerFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.xm_fragment_main, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_category, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
         return view;
     }

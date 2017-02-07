@@ -40,9 +40,10 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private static final String TAG = "MainFragAct";
     private Context mContext;
 
-    private final String[] CONTENT = new String[]{"推荐", "分类", "榜单", "主播"};
     private ViewPager mViewPager;
     private BaseFragment mCurrFragment;
+
+    private final String[] CONTENT = new String[]{"推荐", "分类", "榜单", "主播"};
     private RecommendFragment mRecommendFragment;
     private CategoryFragment mCategoryFragment;
     //private RadiosFragment mRadiosFragment;
@@ -124,7 +125,6 @@ public class MainFragmentActivity extends BaseFragmentActivity {
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-                //System.out.println("淡定  ===  ");
             }
 
             @Override

@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView;
 
 import com.shenqu.wirelessmbox.R;

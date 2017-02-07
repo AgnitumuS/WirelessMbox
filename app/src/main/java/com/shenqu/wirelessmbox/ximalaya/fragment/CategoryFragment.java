@@ -23,9 +23,6 @@ import com.ximalaya.ting.android.opensdk.model.category.CategoryList;
 
 import org.xutils.x;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by JongLim on 2017/1/9.
  */
@@ -73,7 +70,7 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.xm_fragment_main, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_category, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
         return view;
     }

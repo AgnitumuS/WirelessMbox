@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.aspsine.irecyclerview.IRecyclerView;
 import com.shenqu.wirelessmbox.R;
-import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
 import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Created by JongLim on 2017/1/9.
+ * Activity for AlbumFragmentActivity.
+ * */
 
 public class AlbumDetailFragment extends Fragment implements OnItemClickListener<Album> {
     private static final String TAG = "AlbumFra";
@@ -52,9 +57,9 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.xm_fragment_album_detail, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_albums, container, false);
         mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAlbumList = new ArrayList<>();
         mAlbumsAdapter = new IRecyclerAlbumAdapter(mAlbumList);

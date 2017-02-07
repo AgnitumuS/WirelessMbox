@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <include layout="@layout/xm_fragment_main"/>
+        <include layout="@layout/xm_fragment_category"/>
 
         </android.support.v4.view.ViewPager>
 

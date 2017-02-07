@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/side_padding"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal">
+    tools:background="@color/linedivider">
 
     <ImageView
         android:id="@+id/ivCover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/side_padding"
         android:background="@color/grey_light_pro"
         android:minHeight="64dp"
         android:minWidth="64dp"
         android:padding="@dimen/view_small_padding"
-        android:layout_margin="@dimen/side_padding"
         android:scaleType="fitCenter"
         tools:background="@mipmap/ic_album"/>
 
@@ -42,8 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTitle"
-            android:layout_marginTop="@dimen/view_small_padding"
             android:layout_marginBottom="@dimen/view_small_padding"
+            android:layout_marginTop="@dimen/view_small_padding"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="专辑内容简介"
@@ -80,5 +79,11 @@
         android:layout_centerVertical="true"
         android:padding="@dimen/side_padding"
         android:src="@mipmap/xm_enter"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/linedivider"/>
 
 </RelativeLayout>

@@ -3,20 +3,23 @@ package com.shenqu.wirelessmbox.ximalaya.childfragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.aspsine.irecyclerview.IRecyclerView;
+import com.aspsine.irecyclerview.OnLoadMoreListener;
+import com.aspsine.irecyclerview.OnRefreshListener;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
-import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.adapter.AlbumListAdapter;
+import com.shenqu.wirelessmbox.widget.IRefreshHeaderView;
+import com.shenqu.wirelessmbox.widget.LoadMoreFooterView;
+import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
+import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -34,12 +37,14 @@ import java.util.Map;
  * MdataFragmentActivity 下面 SmartTabLayout 对应的 Fragment
  */
 
-public class AlbumListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class AlbumListFragment extends BaseFragment implements OnItemClickListener<Album>, OnLoadMoreListener, OnRefreshListener {
     private static final String TAG = "TracksFra";
     private Context mContext;
-    private PullToRefreshListView mListView;
-    private AlbumListAdapter mAlbumsAdapter;
-    private List<Album> mAlbumList = new ArrayList<Album>();
+    private IRecyclerView mRecyclerView;
+    private LoadMoreFooterView mFooterView;
+    private IRefreshHeaderView mHeaderView;
+    private IRecyclerAlbumAdapter mAlbumsAdapter;
+    private List<Album> mAlbumList;
     private int iAlbumPage = 1;
 
     private boolean isLoading = false;
@@ -52,27 +57,29 @@ public class AlbumListFragment extends BaseFragment implements AdapterView.OnIte
             return;
         }
         isLoading = true;
-        Map<String ,String> map = new HashMap<String, String>();
-        map.put(DTransferConstants.CATEGORY_ID ,mCategoryId);
-        map.put(DTransferConstants.TAG_NAME ,mTagName);
-        map.put(DTransferConstants.CALC_DIMENSION ,"3");
-        map.put(DTransferConstants.PAGE ,"" + iAlbumPage);
-        CommonRequest.getAlbumList(map, new IDataCallBack<AlbumList>(){
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(DTransferConstants.CATEGORY_ID, mCategoryId);
+        map.put(DTransferConstants.TAG_NAME, mTagName);
+        map.put(DTransferConstants.CALC_DIMENSION, "3");
+        map.put(DTransferConstants.PAGE, "" + iAlbumPage);
+        CommonRequest.getAlbumList(map, new IDataCallBack<AlbumList>() {
             @Override
             public void onSuccess(AlbumList albumList) {
                 if (albumList != null && albumList.getAlbums() != null && albumList.getAlbums().size() > 0) {
                     mAlbumList.addAll(albumList.getAlbums());
-                    mListView.onRefreshComplete();
                     mAlbumsAdapter.notifyDataSetChanged();
+                    mFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                } else {
+                    mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                 }
                 isLoading = false;
             }
 
             @Override
             public void onError(int i, String s) {
+                mFooterView.setStatus(LoadMoreFooterView.Status.ERROR);
                 JLLog.showToast(getActivity(), "加载失败~");
                 isLoading = false;
-                mListView.onRefreshComplete();
             }
         });
     }
@@ -80,21 +87,20 @@ public class AlbumListFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.xm_fragment_mdata, container, false);
-        mListView = (PullToRefreshListView) view.findViewById(R.id.albumsView);
-        mListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+        View view = inflater.inflate(R.layout.xm_fragment_albums, container, false);
+        mRecyclerView = (IRecyclerView) view.findViewById(R.id.iRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            }
+        mAlbumList = new ArrayList<>();
+        mAlbumsAdapter = new IRecyclerAlbumAdapter(mAlbumList);
+        mAlbumsAdapter.setOnItemClickListener(this);
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                iAlbumPage++;
-                doLoadAlbumsData();
-            }
-        });
+        mRecyclerView.setIAdapter(mAlbumsAdapter);
+        mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setOnLoadMoreListener(this);
+
+        mHeaderView = (IRefreshHeaderView) mRecyclerView.getRefreshHeaderView();
+        mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         return view;
     }
 
@@ -105,20 +111,11 @@ public class AlbumListFragment extends BaseFragment implements AdapterView.OnIte
         mContext = getActivity();
         mTagName = getArguments().getString("TAGNAME");
         mCategoryId = getArguments().getString("CATEGORYID");
-        mAlbumsAdapter = new AlbumListAdapter(mActivity, mAlbumList);
-        mListView.setAdapter(mAlbumsAdapter);
-        mListView.setOnItemClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        doLoadAlbumsData();
-    }
-
-    public void refresh() {
-        iAlbumPage = 1;
-        mAlbumList.clear();
         doLoadAlbumsData();
     }
 
@@ -129,13 +126,30 @@ public class AlbumListFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(int position, Album album, View v) {
         JLLog.LOGI(TAG, "You clicked the " + position + " item.");
 
         Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
         Bundle b = new Bundle();
-        b.putParcelable("mAlbum", mAlbumList.get(position - 1));
+        b.putParcelable("mAlbum", mAlbumList.get(position));
         intent.putExtras(b);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        iAlbumPage = 1;
+        mAlbumList.clear();
+        doLoadAlbumsData();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (mFooterView.canLoadMore() && mAlbumsAdapter.getItemCount() > 0) {
+            mFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            iAlbumPage++;
+            doLoadAlbumsData();
+        } else
+            mFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
     }
 }

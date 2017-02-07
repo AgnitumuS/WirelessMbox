@@ -1,4 +1,4 @@
-package com.shenqu.wirelessmbox.ximalaya;
+package com.shenqu.wirelessmbox.ximalaya.childactivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +24,12 @@ import com.ximalaya.ting.android.opensdk.model.album.Album;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.x;
+
+
+/**
+ * Created by JongLim on 2016/12/13.
+ * Activity for recommend fragment.
+ * */
 
 public class AlbumFragmentActivity extends BaseFragmentActivity {
     private static final String TAG = "AlbumActi";

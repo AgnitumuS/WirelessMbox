@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.shenqu.wirelessmbox.R;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.widget.NoScrollGridView;
-import com.shenqu.wirelessmbox.ximalaya.AlbumFragmentActivity;
-import com.shenqu.wirelessmbox.ximalaya.MdataFragmentActivity;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
+import com.shenqu.wirelessmbox.ximalaya.childactivity.MdataFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.base.BaseFragment;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
@@ -79,7 +79,7 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.xm_fragment_main, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_category, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
         return view;
     }

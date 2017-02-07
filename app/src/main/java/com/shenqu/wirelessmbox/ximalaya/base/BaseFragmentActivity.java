@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -94,7 +95,7 @@ public class BaseFragmentActivity extends FragmentActivity implements Handler.Ca
     public void setContentLayout(int resId) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         contentView = inflater.inflate(resId, null);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         contentView.setLayoutParams(layoutParams);
         if (null != mBaseLayout) {
             mBaseLayout.addView(contentView);
