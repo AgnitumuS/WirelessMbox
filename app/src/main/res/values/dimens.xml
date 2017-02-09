@@ -28,7 +28,7 @@
     <dimen name="indicator_width_half">3dp</dimen>
     <dimen name="side_padding">10dp</dimen>
 
-    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
 
     <!-- activity_main fragment dimen -->
     <dimen name="service_item_padding">10dp</dimen>

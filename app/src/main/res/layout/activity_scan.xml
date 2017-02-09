@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:layout_marginLeft="@dimen/side_padding"
-        android:layout_marginRight="@dimen/side_padding"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:background="@drawable/shape_frame_bluligalp_corner"
         android:orientation="vertical">
 
@@ -48,8 +48,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btnBar"
         android:layout_below="@id/tvTip"
-        android:layout_marginLeft="@dimen/side_padding"
-        android:layout_marginRight="@dimen/side_padding"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:background="@drawable/shape_frame_bluligalp_corner"
         android:listSelector="@drawable/shape_bluligalp_tra"
         tools:listitem="@layout/item_devinfo"/>
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/side_padding"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:divider="@drawable/spacer_medium"
         android:orientation="horizontal"
         android:showDividers="middle">
@@ -67,7 +67,7 @@
         <Button
             android:id="@+id/btnScan"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_height_small"
+            android:layout_height="@dimen/button_height_normal"
             android:layout_weight="1"
             android:background="@drawable/shape_enable_bluligalp_gre_press_tra"
             android:enabled="true"
@@ -78,7 +78,7 @@
         <Button
             android:id="@+id/btnSetWifi"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_height_small"
+            android:layout_height="@dimen/button_height_normal"
             android:layout_weight="1"
             android:background="@drawable/shape_enable_bluligalp_gre_press_tra"
             android:onClick="onWirelessSetting"
