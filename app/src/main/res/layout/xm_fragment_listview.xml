@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:paddingTop="@dimen/view_padding"
         android:divider="@color/linedivider"
-        android:dividerHeight="1dp"
+        android:dividerHeight="@dimen/view_padding"
         tools:listitem="@layout/xm_item_recmd"/>
 
 </LinearLayout>

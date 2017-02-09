@@ -52,7 +52,7 @@ public class RankFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.xm_fragment_category, container, false);
+        View view = inflater.inflate(R.layout.xm_fragment_listview, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
         return view;
     }
