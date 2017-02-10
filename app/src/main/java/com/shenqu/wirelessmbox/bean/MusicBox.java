@@ -1,5 +1,7 @@
 package com.shenqu.wirelessmbox.bean;
 
+import com.shenqu.wirelessmbox.tools.JLJSON;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,11 +21,11 @@ public class MusicBox {
         JSONObject j = new JSONObject(data);
         j = j.getJSONObject("Body");
 
-        mAddr = j.getString("DeviceIpAddr");
-        mFiremwareVer = j.getString("DeviceFiremwareVersion");
-        mHttpApiPort = j.getString("HttpApiPort");
-        mName = j.getString("DeviceName");
-        mMacAddr = j.getString("DeviceMacAddr");
+        mAddr = JLJSON.getString(j, "DeviceIpAddr");
+        mFiremwareVer = JLJSON.getString(j, "DeviceFiremwareVersion");
+        mHttpApiPort = JLJSON.getString(j, "HttpApiPort");
+        mName = JLJSON.getString(j, "DeviceName");
+        mMacAddr = JLJSON.getString(j, "DeviceMacAddr");
     }
 
     public String getAddr() {

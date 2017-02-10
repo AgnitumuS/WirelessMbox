@@ -30,11 +30,14 @@ import com.shenqu.wirelessmbox.base.BaseActivity;
 import com.shenqu.wirelessmbox.bean.DevAdapter;
 import com.shenqu.wirelessmbox.bean.MusicBox;
 import com.shenqu.wirelessmbox.tools.FastBlur;
+import com.shenqu.wirelessmbox.tools.JLJSON;
 import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.tools.MyProgressDialog;
 import com.shenqu.wirelessmbox.tools.WirelessUtils;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 
@@ -199,6 +202,24 @@ public class ScanActivity extends BaseActivity implements Callback, AdapterView.
 
     public void onScanAgain(View view) {
         initListData();
+//
+//        JSONObject j = new JSONObject();
+//        JSONObject body = new JSONObject();
+//
+//        try {
+//            body.put("DeviceIpAddr", WirelessUtils.getWifiApIpAddress());
+//            body.put("DeviceFiremwareVersion", "null");
+//            body.put("HttpApiPort", "9527");
+//            body.put("DeviceName", "null-device");
+//            body.put("DeviceMacAddr", WirelessUtils.getWifiManager(getBaseContext()).getConnectionInfo().getMacAddress());
+//
+//            j.put("Body", body);
+//            MyApplication.setMusicBox(new MusicBox(j.toString()));
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void onWirelessSetting(View view) {
