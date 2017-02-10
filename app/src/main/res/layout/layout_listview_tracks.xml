@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:cacheColorHint="@color/grey_deep"
-        android:divider="@color/grey_alpha"
+        android:divider="@color/linedivider"
         android:dividerHeight="1dp"
         android:fadingEdge="none"
         android:fastScrollEnabled="false"

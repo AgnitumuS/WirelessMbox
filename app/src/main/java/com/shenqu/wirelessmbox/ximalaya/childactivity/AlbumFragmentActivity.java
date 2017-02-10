@@ -54,9 +54,7 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
     public Album mAlbum;
 
     private void initBaseView() {
-        setTitleViewBackground(Color.RED);
         setTitle("专辑详情");
-        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

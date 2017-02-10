@@ -80,7 +80,7 @@ class MyHttpClient {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            JLLog.LOGI(TAG, "( " + (System.currentTimeMillis() - startTime) + "ms ) " + params.get("JSONREQ"));
+            //JLLog.LOGI(TAG, "( " + (System.currentTimeMillis() - startTime) + "ms ) " + params.get("JSONREQ"));
         }
 
         return result;

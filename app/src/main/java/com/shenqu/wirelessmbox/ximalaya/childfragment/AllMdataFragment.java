@@ -53,7 +53,7 @@ public class AllMdataFragment extends BaseFragment implements OnItemClickListene
      * 创建标签列表 加上手动创建的 无过滤 项
      * mMetaDatas 最终解析出来后将元素 存储于mAttrList
      */
-    private List<List<Attributes>> mAttrList = new ArrayList<>();
+    private List<List<Attributes>> mAttrList;
     private int[] iSelectedAttr;
     
     private final String[] ATTR_PAY = {/*"不限", */"付费", "免费"};
@@ -75,6 +75,7 @@ public class AllMdataFragment extends BaseFragment implements OnItemClickListene
         mCategoryId = getActivity().getIntent().getStringExtra("CategoryId");
         categoryName = getActivity().getIntent().getStringExtra("CategoryName");
         mMetaDatas = new ArrayList<>();
+        mAttrList = new ArrayList<>();
         mAlbumList = new ArrayList<>();
     }
 
@@ -212,6 +213,9 @@ public class AllMdataFragment extends BaseFragment implements OnItemClickListene
         mAlbumsAdapter.setOnItemClickListener(this);
         mFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
 
+        mMetaDatas.clear();
+        mAttrList.clear();
+        mAlbumList.clear();
         doLoadMetaData();
         return view;
     }

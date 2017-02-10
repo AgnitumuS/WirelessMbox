@@ -61,6 +61,19 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        if (mList == null) {
+            return 0;
+        }
+        return mList.size();
+    }
+
+    @Override
     public IViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.xm_item_meta_track, parent, false);
         final ViewHolder holder = new ViewHolder(view);
@@ -113,19 +126,6 @@ public class IRecyclerTrackAdapter extends RecyclerView.Adapter<IViewHolder> {
             ImageOptions options = new ImageOptions.Builder().setFailureDrawableId(R.mipmap.ic_music).setUseMemCache(true).setCircular(true).build();
             x.image().bind(holder.ivCover, track.getCoverUrlSmall(), options);
         }
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mList == null) {
-            return 0;
-        }
-        return mList.size();
     }
 
     private String formatMsToDate(long ms) {

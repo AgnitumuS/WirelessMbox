@@ -51,9 +51,7 @@ public class MainFragmentActivity extends BaseFragmentActivity {
     private AnnouncerFragment mAnnouncerFragment;
 
     private void initBaseView() {
-        setTitleViewBackground(Color.RED);
         setTitle("喜马拉雅");
-        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

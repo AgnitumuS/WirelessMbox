@@ -55,8 +55,6 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
      */
     private void initBaseView() {
         setTitle(mCategoryName);
-        setTitleViewBackground(Color.RED);
-        setTitleColor(Color.WHITE);
         getbtn_left().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

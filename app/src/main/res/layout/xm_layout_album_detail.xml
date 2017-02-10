@@ -20,10 +20,7 @@
         android:layout_margin="@dimen/side_padding"
         tools:text="内容"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/service_item_padding"
-        android:background="@color/linedivider"/>
+    <include layout="@layout/xm_listdivider_grey"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,10 +36,8 @@
         android:layout_margin="@dimen/side_padding"
         tools:text="采采主持人，段子来了"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/service_item_padding"
-        android:background="@color/linedivider"/>
+
+    <include layout="@layout/xm_listdivider_grey"/>
 
     <TextView
         android:layout_width="wrap_content"

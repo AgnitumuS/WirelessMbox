@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:background="@color/grey"
+    android:background="@color/white"
     tools:context=".ximalaya.base.BaseFragmentActivity">
 
     <View
@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/side_padding"
             android:paddingRight="@dimen/side_padding"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_xm_back"/>
 
         <!--正常时候的状态栏-->
         <TextView
@@ -39,7 +39,7 @@
             android:clickable="false"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="@color/text_white"
+            android:textColor="@color/common_red"
             android:textSize="@dimen/text_font_normal"/>
 
         <!--点击搜索按钮后显示的搜索栏-->
@@ -56,8 +56,8 @@
             android:clickable="false"
             android:hint="搜索内容"
             android:maxLines="1"
-            android:textColor="@color/text_white"
-            android:textColorHint="@color/white_alpha"
+            android:textColor="@color/common_red"
+            android:textColorHint="@color/common_red_alpha"
             android:textCursorDrawable="@null"
             android:visibility="gone"/>
 
@@ -79,9 +79,14 @@
             android:layout_marginBottom="1dp"
             android:layout_toLeftOf="@+id/btn_right"
             android:layout_toRightOf="@id/btn_left"
-            android:background="@color/white_alpha"
+            android:background="@color/linedivider"
             android:visibility="gone"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/linedivider"/>
 
 </LinearLayout>
