@@ -47,7 +47,7 @@ public class RecommendFragment extends BaseFragment {
 
     private boolean mLoading = false;
 
-    private void loadRecommendData() {
+    private void doLoadRecommendData() {
         if (mLoading) {
             return;
         }
@@ -57,7 +57,7 @@ public class RecommendFragment extends BaseFragment {
         CommonRequest.getDiscoveryRecommendAlbums(map, new IDataCallBack<DiscoveryRecommendAlbumsList>() {
             @Override
             public void onSuccess(DiscoveryRecommendAlbumsList albumsList) {
-                JLLog.LOGV(TAG, "getDiscoveryRecommendAlbums onSuccess.");
+                //JLLog.LOGV(TAG, "getDiscoveryRecommendAlbums onSuccess.");
                 if (albumsList != null && albumsList.getDiscoveryRecommendAlbumses() != null && albumsList.getDiscoveryRecommendAlbumses().size() != 0) {
                     if (mRecommendAlbums == null)
                         mRecommendAlbums = albumsList.getDiscoveryRecommendAlbumses();
@@ -92,11 +92,11 @@ public class RecommendFragment extends BaseFragment {
 
         mRecommendAdapter = new RecommendAdapter();
         mListView.setAdapter(mRecommendAdapter);
-        loadRecommendData();
+        doLoadRecommendData();
     }
 
     public void refresh() {
-        loadRecommendData();
+        doLoadRecommendData();
     }
 
     @Override
