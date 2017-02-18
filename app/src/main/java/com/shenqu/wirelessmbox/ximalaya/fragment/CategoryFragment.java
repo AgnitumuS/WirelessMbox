@@ -56,6 +56,7 @@ public class CategoryFragment extends BaseFragment {
             public void onSuccess(CategoryList categoryList) {
                 JLLog.LOGV(TAG, "GetCategories onSuccess " + (categoryList != null));
                 if (categoryList != null && categoryList.getCategories() != null && categoryList.getCategories().size() != 0) {
+                    mCategories.clear();
                     mCategories.addAll(categoryList.getCategories());
                     mCategoryAdapter.notifyDataSetChanged();
                 }
@@ -94,6 +95,12 @@ public class CategoryFragment extends BaseFragment {
         });
 
         doLoadCategoryData();
+    }
+
+    @Override
+    public void refresh() {
+        if (mCategories.size() == 0)
+            doLoadCategoryData();
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.ximalaya.ting.android.opensdk.model.album.DiscoveryRecommendAlbumsLis
 
 import org.xutils.x;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +60,8 @@ public class RecommendFragment extends BaseFragment {
             public void onSuccess(DiscoveryRecommendAlbumsList albumsList) {
                 //JLLog.LOGV(TAG, "getDiscoveryRecommendAlbums onSuccess.");
                 if (albumsList != null && albumsList.getDiscoveryRecommendAlbumses() != null && albumsList.getDiscoveryRecommendAlbumses().size() != 0) {
-                    if (mRecommendAlbums == null)
-                        mRecommendAlbums = albumsList.getDiscoveryRecommendAlbumses();
-                    else
-                        mRecommendAlbums.addAll(albumsList.getDiscoveryRecommendAlbumses());
+                    mRecommendAlbums.clear();
+                    mRecommendAlbums.addAll(albumsList.getDiscoveryRecommendAlbumses());
                     mRecommendAdapter.notifyDataSetChanged();
                 }
                 mLoading = false;
@@ -92,11 +91,14 @@ public class RecommendFragment extends BaseFragment {
 
         mRecommendAdapter = new RecommendAdapter();
         mListView.setAdapter(mRecommendAdapter);
+        mRecommendAlbums = new ArrayList<>();
         doLoadRecommendData();
     }
 
+    @Override
     public void refresh() {
-        doLoadRecommendData();
+        if (mRecommendAlbums.size() == 0)
+            doLoadRecommendData();
     }
 
     @Override

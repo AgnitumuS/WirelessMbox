@@ -66,6 +66,8 @@ public class AnnouncerFragment extends BaseFragment {
             public void onSuccess(AnnouncerCategoryList anCategoryList) {
                 //JLLog.LOGV(TAG, "getDiscoveryRecommendAlbums onSuccess.");
                 if (anCategoryList != null && anCategoryList.getList() != null && anCategoryList.getList().size() != 0) {
+                    mAnnCategories.clear();
+                    mAnnouncerLists.clear();
                     mAnnCategories.addAll(anCategoryList.getList());
                     mCategoryAdapter.notifyDataSetChanged();
                 }
@@ -92,6 +94,12 @@ public class AnnouncerFragment extends BaseFragment {
         mAnnCategories = new ArrayList<>();
         mAnnouncerLists = new ArrayList<>();
         doLoadAnnCategories();
+    }
+
+    @Override
+    public void refresh() {
+        if (mAnnCategories.size() == 0)
+            doLoadAnnCategories();
     }
 
     @Override

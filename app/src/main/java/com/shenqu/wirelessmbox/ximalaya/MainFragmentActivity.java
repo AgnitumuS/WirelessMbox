@@ -110,14 +110,12 @@ public class MainFragmentActivity extends BaseFragmentActivity {
                     mCurrFragment = mCategoryFragment;
                 } else if (2 == position) {
                     mCurrFragment = mRankFragment;
-                    if (mCurrFragment != null) {
-                        mCurrFragment.refresh();
-                    }
                 } else if (3 == position) {
                     mCurrFragment = mAnnouncerFragment;
-                    if (mCurrFragment != null) {
-                        mCurrFragment.refresh();
-                    }
+                }
+
+                if (mCurrFragment != null) {
+                    mCurrFragment.refresh();
                 }
             }
 
