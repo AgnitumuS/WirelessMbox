@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -76,6 +78,7 @@ public class PlayerActivity extends BaseActivity implements Handler.Callback, Bo
     private ArrayList<TrackMeta> mFavoriteTracks;   // 2.最爱歌曲列表数据源
     private PopupWindow mTracksWindow;              // 歌曲列表弹出窗口，包含歌曲ListView
     private TrackAdapter mTracksAdapter;
+    Animation anim_loading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,8 @@ public class PlayerActivity extends BaseActivity implements Handler.Callback, Bo
         mIVFavorite = (ImageView) findViewById(R.id.ivFavorite);
 
         mBtnPlay = (ImageView) findViewById(R.id.ctrlStart);
+
+        anim_loading = AnimationUtils.loadAnimation(this, R.anim.load_animation);
     }
 
     private void initView() {
@@ -216,9 +221,13 @@ public class PlayerActivity extends BaseActivity implements Handler.Callback, Bo
                 if (totalDarution > 0)
                     mCtrlSeekBar.setProgress(curDuration * 100 / totalDarution);
                 if (state.TransportState.equals("PLAYING")) {
+                    if (!isPlaying)
+                        mIVAlbum.startAnimation(anim_loading);
                     isPlaying = true;
                     mBtnPlay.setImageResource(R.drawable.ic_pause);
                 } else {
+                    if (isPlaying)
+                        mIVAlbum.clearAnimation();
                     isPlaying = false;
                     mBtnPlay.setImageResource(R.drawable.ic_play);
                 }

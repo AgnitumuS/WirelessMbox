@@ -40,6 +40,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.shenqu.wirelessmbox.action.ActionType;
 import com.shenqu.wirelessmbox.action.BoxControler;
 import com.shenqu.wirelessmbox.action.BoxControler.OnBoxPlayStateListener;
+import com.shenqu.wirelessmbox.action.BoxService;
 import com.shenqu.wirelessmbox.bean.MusicBoxState;
 import com.shenqu.wirelessmbox.bean.TrackAdapter;
 import com.shenqu.wirelessmbox.bean.TrackMeta;
@@ -159,7 +160,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         setContentView(R.layout.activity_main);
         MyApplication.addActivity(this);
         mContext = this;
+
+        /**
+         * 启动盒子链接监听线程
+         * */
+        startService(new Intent(mContext, BoxService.class));
+
         initNavigationView();
+
         /**
          * 浮动窗口
          */
@@ -406,7 +414,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         } else if (id == R.id.nav_exit) {
             mBoxControler.setSyncing(false);
-            MyApplication.exit();
+            /**
+             * 启动盒子链接监听线程
+             * */
+            stopService(new Intent(mContext, BoxService.class));
+            MyApplication.exitApp();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

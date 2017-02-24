@@ -73,15 +73,13 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/side_padding">
 
-        <ImageView
+        <com.shenqu.wirelessmbox.widget.CircleImageView
             android:id="@+id/ivAlbum"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:padding="@dimen/view_padding"
             android:layout_centerInParent="true"
-            android:background="@color/blue_light_alpha"
-            android:src="@mipmap/ic_album"
-            android:scaleType="fitCenter"/>
+            android:src="@mipmap/ic_album"/>
 
     </RelativeLayout>
 

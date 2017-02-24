@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by JongLim on 2016/9/27.
  */
-public class BaseApplication extends Application {
+public abstract class BaseApplication extends Application {
     private final static String TAG = "BaseApp";
 
     /**

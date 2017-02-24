@@ -66,18 +66,19 @@ public class MdataFragmentActivity extends BaseFragmentActivity {
                     finish();
             }
         });
-        getbtn_right().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getTv_title().getVisibility() == View.VISIBLE) {
-                    getTv_title().setVisibility(View.GONE);
-                    getEt_search().setVisibility(View.VISIBLE);
-                    getvLine().setVisibility(View.VISIBLE);
-                } else {
-                    // TODO: 2017/1/9 search the context
-                }
-            }
-        });
+        hidebtn_right();
+//        getbtn_right().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (getTv_title().getVisibility() == View.VISIBLE) {
+//                    getTv_title().setVisibility(View.GONE);
+//                    getEt_search().setVisibility(View.VISIBLE);
+//                    getvLine().setVisibility(View.VISIBLE);
+//                } else {
+//                    // TODO: 2017/1/9 search the context
+//                }
+//            }
+//        });
     }
 
     /**

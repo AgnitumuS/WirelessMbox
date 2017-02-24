@@ -38,7 +38,7 @@ import java.util.Map;
  */
 
 public class AlbumListFragment extends BaseFragment implements OnItemClickListener<Album>, OnLoadMoreListener, OnRefreshListener {
-    private static final String TAG = "TracksFra";
+    private static final String TAG = "AlbumListFra";
     private Context mContext;
     private IRecyclerView mRecyclerView;
     private LoadMoreFooterView mFooterView;

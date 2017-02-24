@@ -32,65 +32,15 @@ import java.net.URLDecoder;
 import java.util.Locale;
 
 public class MyHttpServer {
-    public static final int LISTEN_PORT = 0x2f2f;
     private static final String TAG = MyHttpServer.class.getSimpleName();
+    private boolean isServerExit;
+    public static final int LISTEN_PORT = 0x2f2f;
 
-    public static void start() {
-        try {
-            RequestListenerThread listenerThread = new RequestListenerThread();
-            listenerThread.setDaemon(false);
-            listenerThread.start();
-        } catch (IOException localIOException) {
-            JLLog.LOGE(TAG, localIOException.getLocalizedMessage());
-        }
+    public MyHttpServer(){
+        start();
     }
 
-    private static class RequestListenerThread extends Thread {
-        private final HttpService httpService;
-        private final HttpParams params;
-        private final ServerSocket serversocket;
-
-        RequestListenerThread() throws IOException {
-            serversocket = new ServerSocket(LISTEN_PORT);
-            //serversocket.setReuseAddress(true);
-
-            params = new BasicHttpParams();
-            params.setIntParameter("http.socket.timeout", 5000)
-                    .setIntParameter("http.socket.buffer-size", 8192)
-                    .setBooleanParameter("http.connection.stalecheck", false)
-                    .setBooleanParameter("http.tcp.nodelay", true)
-                    .setParameter("http.origin-server", "HttpComponents/1.1");
-
-            BasicHttpProcessor processor = new BasicHttpProcessor(); //http协议处理器
-
-            //http请求处理程序解析器
-            HttpRequestHandlerRegistry registry = new HttpRequestHandlerRegistry();
-            //http请求处理程序，HttpFileHandler继承于HttpRequestHandler（http请求处理程序)
-            registry.register("*", new WebServiceHandler());
-            httpService = new HttpService(processor, new DefaultConnectionReuseStrategy(), new DefaultHttpResponseFactory());
-            httpService.setParams(params);
-            httpService.setHandlerResolver(registry);//为http服务设置注册好的请求处理器。
-        }
-
-        public void run() {
-            JLLog.LOGV(TAG, "Listening on port " + serversocket.getLocalPort());
-            while (!Thread.interrupted()) {
-                try {
-                    Object object = serversocket.accept();
-                    DefaultHttpServerConnection defHttpSrvConn = new DefaultHttpServerConnection();
-                    defHttpSrvConn.bind((Socket) object, params);
-                    JLLog.LOGV(TAG, "Incoming connection from " + ((Socket) object).getInetAddress());
-                    WorkerThread worker = new WorkerThread(httpService, defHttpSrvConn);
-                    worker.setDaemon(true);
-                    worker.start();
-                } catch (IOException e) {
-                    JLLog.LOGE(TAG, "I/O error initialising connection thread: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    private static class WebServiceHandler implements HttpRequestHandler {
+    private class WebServiceHandler implements HttpRequestHandler {
 
         @Override
         public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
@@ -119,8 +69,7 @@ public class MyHttpServer {
                 httpResponse.setEntity(new FileEntity(file, "application/octet-stream"));
                 httpResponse.setHeader("content-length", String.valueOf(file.length()));
                 httpResponse.setStatusCode(200);
-            }
-            else if (reqUri.contains("-HIVI-")) {
+            } else if (reqUri.contains("-HIVI-")) {
                 File file = new File(URLDecoder.decode(reqUri));
                 JLLog.LOGV(TAG, file.getAbsolutePath() + ", exists:" + file.exists() + ", size:" + file.length());
                 httpResponse.setEntity(new FileEntity(file, "application/octet-stream"));
@@ -130,7 +79,7 @@ public class MyHttpServer {
         }
     }
 
-    private static class WorkerThread extends Thread {
+    private class WorkerThread extends Thread {
         private final HttpServerConnection mConnection;
         private final HttpService httpService;
 
@@ -158,5 +107,63 @@ public class MyHttpServer {
                 }
             }
         }
+    }
+
+    private class RequestListenerThread extends Thread {
+        private final HttpService httpService;
+        private final HttpParams params;
+        private final ServerSocket serversocket;
+
+        RequestListenerThread() throws IOException {
+            serversocket = new ServerSocket(LISTEN_PORT);
+            //serversocket.setReuseAddress(true);
+
+            params = new BasicHttpParams();
+            params.setIntParameter("http.socket.timeout", 5000).setIntParameter("http.socket.buffer-size", 8192).setBooleanParameter("http.connection.stalecheck", false)
+                    .setBooleanParameter("http.tcp.nodelay", true).setParameter("http.origin-server", "HttpComponents/1.1");
+
+            BasicHttpProcessor processor = new BasicHttpProcessor(); //http协议处理器
+
+            //http请求处理程序解析器
+            HttpRequestHandlerRegistry registry = new HttpRequestHandlerRegistry();
+            //http请求处理程序，HttpFileHandler继承于HttpRequestHandler（http请求处理程序)
+            registry.register("*", new WebServiceHandler());
+            httpService = new HttpService(processor, new DefaultConnectionReuseStrategy(), new DefaultHttpResponseFactory());
+            httpService.setParams(params);
+            httpService.setHandlerResolver(registry);//为http服务设置注册好的请求处理器。
+        }
+
+        public void run() {
+            JLLog.LOGV(TAG, "Listening on port " + serversocket.getLocalPort());
+            while (!Thread.interrupted() && !isServerExit) {
+                try {
+                    Object object = serversocket.accept();
+                    DefaultHttpServerConnection defHttpSrvConn = new DefaultHttpServerConnection();
+                    defHttpSrvConn.bind((Socket) object, params);
+                    JLLog.LOGV(TAG, "Incoming connection from " + ((Socket) object).getInetAddress());
+                    WorkerThread worker = new WorkerThread(httpService, defHttpSrvConn);
+                    worker.setDaemon(true);
+                    worker.start();
+                } catch (IOException e) {
+                    JLLog.LOGE(TAG, "I/O error initialising connection thread: " + e.getMessage());
+                }
+            }
+            JLLog.LOGV(TAG, "Stop the Listening.");
+        }
+    }
+
+    private void start() {
+        isServerExit = false;
+        try {
+            RequestListenerThread listenerThread = new RequestListenerThread();
+            listenerThread.setDaemon(false);
+            listenerThread.start();
+        } catch (IOException localIOException) {
+            JLLog.LOGE(TAG, localIOException.getLocalizedMessage());
+        }
+    }
+
+    public void stop(){
+        isServerExit = true;
     }
 }

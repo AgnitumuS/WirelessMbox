@@ -34,7 +34,7 @@ import java.util.Map;
  * */
 
 public class AlbumTracksFragment extends BaseFragment implements OnItemClickListener<Track>, OnLoadMoreListener {
-    private static final String TAG = "AlbumFra";
+    private static final String TAG = "AlbumTracksFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
 

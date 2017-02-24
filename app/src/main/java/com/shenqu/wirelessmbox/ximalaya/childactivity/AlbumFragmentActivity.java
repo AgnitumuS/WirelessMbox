@@ -170,4 +170,10 @@ public class AlbumFragmentActivity extends BaseFragmentActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        JLLog.LOGI(TAG, "onDestroy()");
+    }
 }

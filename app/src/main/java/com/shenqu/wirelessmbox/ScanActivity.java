@@ -29,6 +29,7 @@ import com.shenqu.wirelessmbox.action.ThreadBroadcast;
 import com.shenqu.wirelessmbox.base.BaseActivity;
 import com.shenqu.wirelessmbox.bean.DevAdapter;
 import com.shenqu.wirelessmbox.bean.MusicBox;
+import com.shenqu.wirelessmbox.tools.AnimationTest;
 import com.shenqu.wirelessmbox.tools.FastBlur;
 import com.shenqu.wirelessmbox.tools.JLJSON;
 import com.shenqu.wirelessmbox.tools.JLLog;
@@ -71,7 +72,7 @@ public class ScanActivity extends BaseActivity implements Callback, AdapterView.
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), params[0]);
             Point point = new Point();
             getWindowManager().getDefaultDisplay().getSize(point);
-            return FastBlur.blur(bitmap, point.x, point.y);
+            return FastBlur.blur(bitmap, point.x, point.y, 5, 8);
         }
 
         @Override
@@ -202,6 +203,8 @@ public class ScanActivity extends BaseActivity implements Callback, AdapterView.
 
     public void onScanAgain(View view) {
         initListData();
+
+        //startActivity(new Intent(this, AnimationTest.class));
 //
 //        JSONObject j = new JSONObject();
 //        JSONObject body = new JSONObject();

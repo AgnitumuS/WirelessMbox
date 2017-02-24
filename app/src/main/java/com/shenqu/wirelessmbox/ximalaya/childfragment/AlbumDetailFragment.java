@@ -1,5 +1,6 @@
 package com.shenqu.wirelessmbox.ximalaya.childfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.aspsine.irecyclerview.IRecyclerView;
 import com.shenqu.wirelessmbox.R;
+import com.shenqu.wirelessmbox.tools.JLLog;
 import com.shenqu.wirelessmbox.ximalaya.childactivity.AlbumFragmentActivity;
 import com.shenqu.wirelessmbox.ximalaya.adapter.IRecyclerAlbumAdapter;
 import com.shenqu.wirelessmbox.ximalaya.adapter.OnItemClickListener;
@@ -30,7 +32,7 @@ import java.util.Map;
  * */
 
 public class AlbumDetailFragment extends Fragment implements OnItemClickListener<Album> {
-    private static final String TAG = "AlbumFra";
+    private static final String TAG = "AlbumDetailFra";
     public static final String TITLE = "title";
     private String mTitle = "Defaut Value";
 
@@ -111,6 +113,15 @@ public class AlbumDetailFragment extends Fragment implements OnItemClickListener
 
     @Override
     public void onItemClick(int position, Album album, View v) {
+        JLLog.LOGI(TAG, "You clicked the " + position + " item.");
 
+        getActivity().finish();
+
+        JLLog.LOGV(TAG, "You clicked the " + position + " item.");
+        Intent intent = new Intent(getActivity(), AlbumFragmentActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelable("mAlbum", mAlbumList.get(position));
+        intent.putExtras(b);
+        startActivity(intent);
     }
 }

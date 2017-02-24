@@ -12,15 +12,19 @@ import static com.shenqu.wirelessmbox.tools.JLLog.LOGI;
 public class FastBlur {
     private static final String TAG = "FastBlur";
 
-    public static Bitmap blur(Bitmap bkg, int w, int h) {
+    public static Bitmap blur(Bitmap bitmap, int w, int h, int scaledRatio, int radius) {
         long startMs = System.currentTimeMillis();
-        int radius = 30;
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         Bitmap gBackgroundBmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(gBackgroundBmp);
-        canvas.drawBitmap(bkg, 0, 0, paint);
-        gBackgroundBmp = FastBlur.doBlur(gBackgroundBmp, radius, true);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+
+        /**
+         * 先缩放bmp
+         * */
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(gBackgroundBmp, gBackgroundBmp.getWidth()/scaledRatio, gBackgroundBmp.getHeight()/scaledRatio, false);
+        gBackgroundBmp = FastBlur.doBlur(scaledBitmap, radius, true);
         LOGI(TAG, "Blur background used " + (System.currentTimeMillis() - startMs) + "ms");
         return gBackgroundBmp;
     }

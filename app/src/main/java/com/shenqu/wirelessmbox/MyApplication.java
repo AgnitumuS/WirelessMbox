@@ -1,6 +1,9 @@
 package com.shenqu.wirelessmbox;
 
+import android.content.Intent;
+
 import com.shenqu.wirelessmbox.action.BoxControler;
+import com.shenqu.wirelessmbox.action.BoxService;
 import com.shenqu.wirelessmbox.action.MyHttpServer;
 import com.shenqu.wirelessmbox.base.BaseApplication;
 import com.shenqu.wirelessmbox.bean.MusicBox;
@@ -66,12 +69,21 @@ public class MyApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         gCacheBmp = ACache.getMemoryKey(getACacheDir() + "/cache") + "_";
-        MyHttpServer.start();
-
         /**
          * 喜马拉雅接入，用到 xUtil 库
          * */
         x.Ext.init(this);
+    }
+
+    public static void exitApp(){
+        exit();
+        gControler = null;
+        gMusicBox = null;
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 
     @Override
